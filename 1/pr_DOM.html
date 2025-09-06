@@ -1,0 +1,21 @@
+<HTML> 
+<HEAD>
+	<TITLE> DOM </TITLE> 
+	<script defer>
+		function sum() {
+			document.Sum.result.value = parseInt(document.Sum.number1.value) +  parseInt(document.Sum.number2.value);
+		}
+		My_window=window.open("pr_11.html","wind", "width=250,height=100,status=no, toolbar=no,menubar=no,scrollbars=no");
+
+	</script>
+</HEAD> 
+<BODY> 
+<FORM name=Sum> 
+Первое число <INPUT type="text" name="number1"><BR> 
+Второе число <INPUT type="text" name="number2"><BR> 
+<INPUT type="button" name="but"  
+value="Вычислить сумму" onclick="sum();"><BR><BR> 
+Сумма <INPUT type="text" name="result"> 
+</FORM> 
+</BODY> 
+</HTML>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body{
+			color: #ccc;
+			background-color: brown;
+		}
+	</style>
+	<script defer>
+		var username = null;
+		function escapeHtml(unsafe){
+			return unsafe
+				.replaceAll('&','&amp;')
+				.replaceAll('<','&lt;')
+				.replaceAll('>','&gt;')
+				.replaceAll('\"','&quot;')
+				.replaceAll('\'','&#39;');
+		}
+		function setUsernamePrompt(){
+			username = escapeHtml(prompt('Введите ваше имя'));
+		}
+		function setWelcomeFieldContent(value) {
+			const element = document.getElementById('welcome-field');
+			if(element === undefined)
+				throw Error(`Не найден элемент \"welcome-field}\"`);
+			element.innerHTML = '';
+			
+			const newElement = document.createElement('p');
+			if(value === null || value === undefined || value == '')
+				newElement.textContent = 'Здравствуйте! Было бы приятно с Вами познакомиться';
+			else
+				newElement.textContent = `Здравствуйте, ${escapeHtml(value)}!`;
+			element.appendChild(newElement);
+			
+
+		}
+		function changeUsernamePrompt() {
+			if(confirm('Вы хотите изменить имя пользователя?')){
+				setUsernamePrompt();
+				setWelcomeFieldContent(username);
+			}
+		}
+
+		var username;
+		document.addEventListener('DOMContentLoaded', async function() {
+			setTimeout(async function(){
+				setUsernamePrompt();
+				setWelcomeFieldContent(username);
+			}, 1);
+		});
+	</script>
+	<script>
+		function loadSumCalculation(){
+			window.open('Lab11_2.html', 'wind', "width=900,height=600,status=no");
+		}
+	</script>
+	
+	<title>Лабораторная практическая №11</title>
+</head>
+<body>
+	<h1>Лабораторная практическая №11</h1>
+	<div id="welcome-field" onclick="changeUsernamePrompt();"></div>
+	<button onclick="loadSumCalculation();">Открыть окно получения суммы натуральных чисел</button>
+</body>
+</html>

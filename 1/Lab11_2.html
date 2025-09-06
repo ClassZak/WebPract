@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Вычисление суммы n натуральных чисел</title>
+	<link rel="stylesheet" href="Lab11_2style.css">
+	<script defer>
+		var result;
+		var resultWindow;
+
+		function sumOfNaturalNumbersUnsafe(n){
+			n = Math.floor(n);
+			if (!sumOfNaturalNumbersUnsafe.cache)
+				sumOfNaturalNumbersUnsafe.cache = {};
+			if (sumOfNaturalNumbersUnsafe.cache[n] !== undefined)
+				return sumOfNaturalNumbersUnsafe.cache[n];
+			if (n == 1)
+				return 1;
+			if (n == 2)
+				return 3;
+			const result = n + sumOfNaturalNumbersUnsafe(n - 1);
+			sumOfNaturalNumbersUnsafe.cache[n] = result;
+			return result;
+		}
+		function sumOfNaturalNumbers(n){
+			if(n === null || n ===  undefined)
+				throw Error('Передано пустое значение');
+			if(isNaN(n))
+				throw Error('Передано не число');
+			if(typeof n !== 'number')
+				throw Error('Неверный тип аргумента');
+			if(!Number.isFinite(n))
+				throw Error('Передана бесконечность');
+			if(n <= 0 || !Number.isInteger(n))
+				throw Error('Передано не натуральное число');
+
+			return sumOfNaturalNumbersUnsafe(n);
+		}
+		
+		function closeWindow() {
+			// Проверяем, открыто ли окно в отдельном окне/вкладке
+			if (window.opener) {
+				window.close();
+			} else {
+				alert("Это окно нельзя закрыть программно, так как оно открыто в этой же вкладке.");
+			}
+		}
+		
+		function calculate(){
+			// Скрыть предыдущие ошибки
+			document.getElementById('error-message').style.display = 'none';
+			
+			try {
+				const selectedRadio = document.querySelector('input[name="result-form"]:checked');
+
+				if(selectedRadio === undefined)
+					throw Error('Не найдена форма для определения вывода результата');
+
+				result = sumOfNaturalNumbers(parseInt(document.task.natural_numbers.value));
+
+				if(selectedRadio.value == 'window'){
+					// Открываем новое окно с уникальным именем, добавляя временную метку
+					const windowName = 'resultWindow_' + Date.now();
+					resultWindow = window.open('', windowName, "width=400,height=300,status=no");
+					
+					if (!resultWindow || resultWindow.closed) {
+						throw Error('Не удалось открыть новое окно. Возможно, браузер заблокировал всплывающее окно.');
+					}
+					
+					resultWindow.document.write(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Результат</title>
+	<link rel="stylesheet" href="Lab11_2styleWindow.css">
+</head>
+<body>
+	<h1>Результат вычислений</h1>
+	<p>${result}</p>
+	<button class="btn-close" onclick="window.close()">Закрыть окно</button>
+</body>
+</html>
+					`);
+					resultWindow.document.close();
+				} else if(selectedRadio.value == 'alert-window'){
+					alert(`Сумма натуральных чисел: ${result}`);
+				} else if(selectedRadio.value == 'page'){
+					const element = document.getElementById('result-field');
+					if(element === undefined)
+						throw Error(`Не найден элемент \"result-field\"`);
+					element.innerHTML = '';
+					
+					const newElement = document.createElement('p');
+					newElement.textContent = `Результат: ${result}`;
+					element.appendChild(newElement);
+					element.classList.add('success-animation');
+					setTimeout(() => element.classList.remove('success-animation'), 1000);
+				}
+			} catch (error) {
+				const errorElement = document.getElementById('error-message');
+				errorElement.textContent = error.message;
+				errorElement.style.display = 'block';
+			}
+		}
+	</script>
+</head>
+<body>
+	<div class="container">
+		<h1>Вычисление суммы натуральных чисел</h1>
+		
+		<form name="task">
+			<div class="form-group">
+				<label for="natural-numbers">Введите натуральное число:</label>
+				<input type="text" id="natural-numbers" name="natural_numbers" placeholder="Введите число...">
+			</div>
+			
+			<div class="radio-group">
+				<legend>Выберите способ отображения результата:</legend>
+				<div class="radio-options">
+					<div class="radio-option">
+						<input type="radio" id="window" name="result-form" value="window" checked/>
+						<label for="window">В новом окне</label>
+					</div>
+					<div class="radio-option">
+						<input type="radio" id="alert-window" name="result-form" value="alert-window" />
+						<label for="alert-window">В окне alert</label>
+					</div>
+					<div class="radio-option">
+						<input type="radio" id="page" name="result-form" value="page" />
+						<label for="page">На странице</label>
+					</div>
+				</div>
+			</div>
+			
+			<button type="button" class="btn" onclick="calculate();">
+				Вычислить сумму натуральных чисел
+			</button>
+		</form>
+		
+		<div id="result-field"></div>
+		<div id="error-message" class="error"></div>
+		
+		<button type="button" class="btn btn-close" onclick="closeWindow()">
+			Закрыть это окно
+		</button>
+	</div>
+</body>
+</html>
