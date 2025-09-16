@@ -1,0 +1,8 @@
+form *{
+	display: block;
+}
+
+form + *{
+	margin-top:5px;
+}
+

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script language = "javascript">
+        function whichButton(event) {
+            if(event.button == 2)
+        {
+            alert("Вы щелкнули правой кнопкой мыши!");
+        }
+        else {
+            alert("Вы щелкнули левой кнопкой мыши!");
+        }
+        }
+    </script>
+    <style>
+        html {
+            height: 100%;
+        }
+        body {
+            height: 100%;
+        }
+    </style>
+</head>
+<body onmousedown="whichButton(event)">
+    <p>
+        Щелкните любой кнопкой мыши в любом месте.
+    </p>
+</body>
+</html>

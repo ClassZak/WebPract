@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="app.js"></script>
+</head>
+<body>
+    <style>
+        html{
+            background-color: aqua;
+        }
+        button{
+            background-color: azure;
+        }
+        input[type="number"]{
+            width: 80%;
+            min-width: 20px;
+        }
+        .shadow-card{
+            box-shadow: 1px 1px 10px #111;
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .shadow-card:hover{
+                box-shadow: 1px 1px 20px #111;
+            }
+        }
+        form{
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+    </style>
+    <p 
+        onmouseover="event.target.style.color = 'pink';"
+        onmouseout="event.target.style.color = 'black';"
+        >Владимир Путин молодец</p>
+    <p onclick="alert(`Райков Тимофей и Голуб Захар`)">Политик, лидер и боец</p>
+
+    <form name="form" class="shadow-card">
+        <label for="h">Высота</label>
+        <input type="number" name="h" id="h"><hr>
+        <label for="r">Радиус</label>
+        <input type="number" name="r" id="r"><hr>
+        
+        <label for="res">Результат</label>
+        <input type="number" name="res" id="res"><hr>
+
+        <input type="button" onclick="document.form.res.value = getConeVolume(parseFloat(document.form.h.value), parseFloat(document.form.r.value));" value="Вычислить">
+    </form>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="app.js" defer></script>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <form name="form">
+        <input name="n1" type="number">
+        <input name="n2" type="number">
+        <input name="n3" type="number">
+        
+        <input type="button" value="Получить максимальное число"
+            onclick="alert(getMax(
+                parseFloat(document.form.n1.value),
+                parseFloat(document.form.n2.value),
+                parseFloat(document.form.n3.value))
+            );"
+        >
+
+        <input name="cancel_button" value="Отмена" type="button" onclick="document.form.n1.value = document.form.n2.value = document.form.n3.value = ''">
+    </form>
+</body>
+</html>

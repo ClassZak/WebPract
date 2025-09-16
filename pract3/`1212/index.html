@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="app.js" defer></script>
+</head>
+<body>
+	<form name="form1">
+		<input name="n1" type="number">
+		
+		<input type="button" value="Получить номер месяца и время года"
+			onclick="showWindow(season(
+				parseInt(document.form1.n1.value))
+			);"
+		>
+	</form>
+	<form name="form2">
+		<input name="n1" type="number">
+		<input name="n2" type="number">
+		
+		<input type="button" value="Получить максимальное значение"
+			onclick="showWindow(Math.max(document.form2.n1.value, document.form2.n2.value));"
+		>
+	</form>
+
+	
+	<button onclick="showWindow('12134342')">Передать в другое окно</button>
+</body>
+</html>
