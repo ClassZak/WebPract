@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        function showValues(f){
+            alert("Флажок 1:\n"+
+                "Имя: "+f.option1.name+"\n"+
+                "Значение: "+f.option1.value+"\n\n"+
+                "Флажок 2:\n"+
+                "Имя: "+f.option2.name+"\n"+
+                "Значение: "+f.option2.value+"\n\n"+
+				"Флажок 3:\n"+
+                "Имя: "+f.option3.name+"\n"+
+                "Значение: "+f.option3.value+"\n\n"
+            );
+        }
+
+        function access(f){
+			/* const checkbox = document.getElementById('myCheckbox');
+    if (checkbox.checked)*/
+			
+			alert(
+				(f.option1.checked ? 0x01 : 0)  |
+				(f.option2.checked ? 0x02 : 0)  |
+				(f.option3.checked ? 0x04 : 0)
+
+
+
+			)
+        }
+    </script>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <form>
+    Уровни доступа.<br>
+    <input type="checkbox" name="option1" value="First" checked>Чтение<br>
+    <input type="checkbox" name="option2" value="Second" checked>Редактирование<br>
+    <input type="checkbox" name="option3" value="Third" checked>Исполнение
+    <p><input type="button" value="Результат" onclick="showValues(this.form); access(this.form);"></p>
+  </form>
+</body>
+</html>

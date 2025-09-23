@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="app.js" defer></script>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <form name="forma3" class="shadow-card">
+        Сторона 1 <input type="text" size="8" maxlength="8" name="st1">
+        Сторона 2 <input type="text" size="8" maxlength="8" name="st2">
+        Сторона 3 <input type="text" size="8" maxlength="8" name="st3"><br><br>
+        <input type="button" value="Вычислить" onclick="areaOfTriangle(forma3);">
+        <input type="reset" value="Отменить">
+        Результат <input type="text" size="8" maxlength="8" name="result">
+    </form>
+    <form name="form1" class="shadow-card">
+        Минимальное значение <input type="number" size="8" maxlength="8" name="i1">
+        Максимальное значение <input type="number" size="8" maxlength="8" name="i2">
+        <input type="button" value="Вычислить" onclick="minMaxRandom(form1);">
+        <input type="reset" value="Отменить">
+        Результат <input type="text" size="8" maxlength="8" name="result">
+    </form>
+
+    <h1 id="equal"></h1>
+    <form name="form2" class="shadow-card">
+        Значение a <input type="number" size="8" maxlength="8" name="i1" onchange="renderEqual(form2)">
+        Значение b <input type="number" size="8" maxlength="8" name="i2" onchange="renderEqual(form2)">
+        Значение c <input type="number" size="8" maxlength="8" name="i3" onchange="renderEqual(form2)">
+        <input type="button" value="Вычислить" onclick="resolveSquareEqual_FromForm(form2);">
+        <input type="reset" value="Отменить">
+        Результат <input type="text" size="8" maxlength="8" name="result">
+    </form>
+</body>
+</html>

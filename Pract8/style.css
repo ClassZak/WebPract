@@ -1,0 +1,38 @@
+form *{
+    display: block;
+}
+
+form + *{
+    margin-top: 80px;
+}
+form{
+    display: block;
+    padding: 40px;
+    border-radius: 20px;
+    margin-right: auto;
+}
+form * + *{
+    margin-top: 20px;
+}
+
+
+/*<h1 id="seconds"></h1>
+    <h1 style="border-radius: 150px; padding: 30px; margin: 100px; font-size: 400px; aspect-ratio: 1/1; display: inline; width: 400;" class="shadow-card">JS</h1>*/
+
+
+.shadow-card{
+	box-shadow: 1px 1px 20px #111;
+}
+@media (hover: hover) and (pointer: fine) {
+	.shadow-card:hover{
+		box-shadow: 1px 1px 40px #111;
+	}
+}
+body {
+        background: linear-gradient(to bottom right, pink, blue);
+        background-attachment: fixed;
+}
+*{color: #0004ff;}
+input:hover {
+    transform: scale(2)
+}
