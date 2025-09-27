@@ -24,11 +24,7 @@ addEventListener('DOMContentLoaded', async function(e){
 			const formData = new FormData(this);
 			console.log(formData);
 
-			const formDataObject = {};
-			for(let [key, value] of formData.entries())
-				formDataObject[key] = value;
-
-			User.Users.push(new User(formDataObject));
+			User.Users.push(new User(Object.fromEntries(formData.entries())));
 		});
 	}, 5);
 });
