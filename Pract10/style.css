@@ -1,0 +1,42 @@
+form *{
+    display: block;
+}
+
+form + *{
+    margin-top: 80px;
+}
+form{
+    display: block;
+    padding: 40px;
+    border-radius: 20px;
+    margin-right: auto;
+}
+form * + *{
+    margin-top: 20px;
+}
+a{
+    color: black;
+    text-decoration: none;
+}
+
+.shadow-card{
+	box-shadow: 1px 1px 20px #111;
+}
+@media (hover: hover) and (pointer: fine) {
+	.shadow-card:hover{
+		box-shadow: 1px 1px 40px #111;
+	}
+}
+/*body {
+        background: linear-gradient(to bottom right, pink, blue);
+        background-attachment: fixed;
+}
+*{color: #0004ff;}
+input:hover {
+    transform: scale(2)
+}
+*/
+.color_but {font-weight:bold; background-color: #a0a0a0;}
+table{
+    border-style: solid;
+}
