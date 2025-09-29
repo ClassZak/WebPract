@@ -10,9 +10,20 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form name="form_register">
+    <form name="form_register" class="shadow-card">
 		<input type="text"		name="login">
 		<input type="password"	name="password">
+
+		<fieldset>
+			<div>
+				<input type="radio" name="male" checked>
+				<label for="male">Мужской</label>
+			</div>
+			<div>
+				<input type="radio" name="female" checked>
+				<label for="fmale">Женский</label>
+			</div>
+		</fieldset>
 
 		<select name="sity">
 			<option>Майкоп</option>

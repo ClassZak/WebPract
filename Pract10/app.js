@@ -5,7 +5,7 @@ function updateTheme(){
 	let date = new Date();
 	let hours = date.getHours();
 
-	if (hours => 21 || hours <= 6)
+	if (hours >= 21 || hours <= 6)
 		document.body.style.backgroundColor = '#555';
 }
 

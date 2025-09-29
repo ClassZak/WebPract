@@ -8,5 +8,6 @@ class User{
 		this.login		= data.login	|| '';
 		this.password	= data.password || '';
 		this.sity		= data.sity		|| '';
+		this.gender		= data.gender	|| '';
 	}
 }
