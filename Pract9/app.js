@@ -171,7 +171,7 @@ function curveMove(xid, yexpr, xexpr, ztime){
 	if(!xexpr)
 		xexpr = "x";
 	if(!ztime)
-		ztime = 100;
+		ztime = 50;
 
 	x = 0;
 	setInterval(function(){moveCurve(xid, yexpr, xexpr);},ztime)
