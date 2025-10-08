@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вывод символов строки в "столбик"</title>
+    <script src="app.js"></script>
+    <script>function ttest(s){
+        var sres="Прочитанный текст:"+"\r\n"+s+"\r\n"+'Текст в "столбик":'+"\r\n"
+        let cur=""
+        for (let i=0; i<= s.length-1; i+=1)
+    {c=s.charAt(i); cur+=c+"\r\n"}
+    sres+=cur
+    return sres
+    }</script>
+</head>
+<body bgcolor="#FFFFCC">
+    <h4> Символы текущей строки в столбик</h4>
+    <FORM name="form1">Введите строку:<input type="text" size="20" name="st1"><hr>
+    <input type="button" value="Выполнить" onclick="form1.res.value=ttest(form1.st1.value)">
+<input type="reset" value="Очистить"><hr>
+<textarea cols="20" rows="7" name="res"></textarea></FORM>
+    
+</body>
+</html>

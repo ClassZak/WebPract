@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="app.js"></script>
+</head>
+<body>
+    <form name="form1">
+        Введите текст:<br>
+
+        <textarea name="textin" rows="8" cols="20"></textarea><hr>
+
+        <input type="button" value="Получить число слов" onclick="alert(getWordsCount(form1.textin.value));">
+    </form>
+    <form name="form2">
+        Введите текст:<br>
+
+        <textarea name="textin" rows="8" cols="20"></textarea><hr>
+
+        <input type="text" name="search_word">
+        <input type="text" name="replace_word">
+        <input type="button" value="Заменить одно слово на другое" onclick="alert(replaceForText(form2.textin.value, form2.search_word.value.trim(), form2.replace_word.value.trim()));">
+    </form>
+    <form name="form3">
+        Введите текст:<br>
+
+        <textarea name="textin" rows="8" cols="20"></textarea><hr>
+
+        <input type="button" value="Убрать лишние пробелы" onclick="alert(trimSpaces(form3.textin.value));">
+    </form>
+</body>
+</html>

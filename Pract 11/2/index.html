@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Количество слов заданных в тексте</title>
+    <script src="app.js"></script>
+    <script>function numword(obj){
+        let h=obj.data.value
+        let s=obj.textin.value
+        s=' '+s+' '
+        h=' '+h+' '
+        let m=h.length
+        let res=0
+        let i=0
+        while (i <= s.length-1)
+    { ch=s.substr(i,m)
+        if (ch==h) {res+=1; i=i+m-1}
+        else i++
+    }
+    obj.result.value=res
+    }</script>
+</head>
+<body bgcolor="#FFFFCC">
+    <h4>Количество заданых слов в тексте</h4>
+    <form name="form1">Введите текст:<br>
+        <textarea name="textin" rows="4" cols="20"></textarea><hr>
+        Введите слово: <input type="text" name="data" size="8"><hr>
+        <input type="button" value="Определить" onclick="numword(form1)"><hr>
+        Количество слов в тексте: <input type="text" name="result" size="8"><hr>
+        <input type="reset" value="Отменить">
+    </form>
+</body>
+</html>

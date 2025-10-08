@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="app.js"></script>
+</head>
+<body>
+    <form name="form1">
+        Введите текст:<br>
+
+        <textarea name="textin" rows="8" cols="20"></textarea><hr>
+
+        <input type="text" value="Сочетание букв" name="alpha">
+        <input type="button" value="Вывести инфу о предложении" onclick="alert(takeReport(form1.textin.value, form1.alpha.value))">
+    </form>
+
+</body>
+</html>
