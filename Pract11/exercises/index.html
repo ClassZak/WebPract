@@ -39,5 +39,10 @@
 			form4.result.value=expression.evaluate();"
 		>
 	</form>
+	<form name="form5">
+		Введите текст:<br>
+		<textarea name="textin" rows="8" cols="20"></textarea><hr>
+		<input type="button" value="Создать окно" onclick="closeWindow();showWindow(reflectString(form5.textin.value));">
+	</form>
 </body>
 </html>
