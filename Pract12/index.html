@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="app.js"></script>
+
+    <title>Document</title>
+</head>
+<body>
+    <form name="form1">
+        <label for="date"></label>
+        <input type="date" name="inputDate">
+        <input type="button" value="Получить возраст" onclick="form1.Age.value=getAge(form1.inputDate.value)">
+        <input type="text" readonly name="Age">
+    </form>
+</body>
+</html>
