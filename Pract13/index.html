@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Форма брони номера в гостиннице</title>
+
+	<link rel="stylesheet" href="style.css">
+	<script src="app.js"></script>
+</head>
+<body>
+	<form name="form1">
+		<div>
+			<label for="surname">ФИО</label>
+			<input type="text" name="surname" required>
+		</div>
+
+		<div>
+			<label for="inputDate">с</label>
+			<input type="date" name="inputDate" required>
+			<label for="inputDate2">по</label>
+			<input type="date" name="inputDate2" required>
+		</div>
+
+		<div>
+			<label for="numberPeople">кол-во чел.</label>
+			<input type="number" name="numberPeople" required>
+		</div>
+
+		<div>
+			<label for="age">возраст</label>
+		</div>
+		<div>
+			<input type="radio" name="age" value="0-4" checked>
+			<label for="age">0-4</label>
+		</div>
+		<div>
+			<input type="radio" name="age" value="5-17">
+			<label for="age">5-17</label>
+		</div>
+		<div>
+			<input type="radio" name="age" value="18 и cтарше">
+			<label for="age">18 и старше</label>
+		</div>
+
+		<div>
+			<label for="additional">Доп. сообщаю</label>
+		</div>
+		<div>
+			<input type="checkbox" name="additional" value="нуждаюсь в парковке">
+			<label for="additional">нуждаюсь в парковке</label>
+		</div>
+		<div>
+			<input type="checkbox" name="additional" value="заселюсь с дом. питомцем">
+			<label for="additional">заселюсь с дом. питомцем</label>
+		</div>
+		<div>
+			<input type="checkbox" name="additional" value="имею вредные привычки">
+			<label for="additional">имею вредные привычки</label>
+		</div>
+
+		<input type="reset" value="Очистить">
+		<input type="submit" value="Забронировать">
+	</form>
+	
+</body>
+</html>
