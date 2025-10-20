@@ -1,32 +1,32 @@
 :root{
-    font-family: Arial, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 form div input[type="text"]{
-    display: block;
+	display: block;
 }
 form div + div{
-    margin-top: 5px;
+	margin-top: 5px;
 }
 form > div{
-    padding: 4px;
-    border-radius: 4px;
-    width: 70%;
+	padding: 4px;
+	border-radius: 4px;
+	width: 70%;
 }
 form > div{
-    margin-left: auto;
-    margin-right: auto;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 form{
-    display: block;
-    padding: 30px;
-    border-radius: 20px;
-    margin-right: auto;
+	display: block;
+	padding: 30px;
+	border-radius: 20px;
+	margin-right: auto;
 	margin-left: auto;
 	margin-top: 40px;
 	width: 70%;
-    background-color: aquamarine;
+	background-color: aquamarine;
 }
 .shadow-card{
 	box-shadow: 1px 1px 5px #111;
@@ -38,14 +38,14 @@ form{
 }
 
 input[type=submit], input[type=reset]{
-    padding: 5px;
-    border-radius: 5px;
+	padding: 5px;
+	border-radius: 5px;
 }
 
 
 input[type=submit]{
-    background: greenyellow;
+	background: greenyellow;
 }
 input[type=reset]{
-    background: crimson;
+	background: crimson;
 }
