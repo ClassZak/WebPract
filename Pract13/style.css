@@ -1,5 +1,6 @@
 :root{
 	font-family: Arial, Helvetica, sans-serif;
+	background-color: #242424;
 }
 
 form div input[type="text"]{
@@ -11,7 +12,6 @@ form div + div{
 form > div{
 	padding: 4px;
 	border-radius: 4px;
-	width: 70%;
 }
 form > div{
 	margin-left: auto;
@@ -19,26 +19,19 @@ form > div{
 }
 
 form{
-	display: block;
-	padding: 30px;
+	padding: 25px;
 	border-radius: 20px;
 	margin-right: auto;
 	margin-left: auto;
 	margin-top: 40px;
-	width: 70%;
-	background-color: aquamarine;
-}
-.shadow-card{
-	box-shadow: 1px 1px 5px #111;
-}
-@media (hover: hover) and (pointer: fine) {
-	.shadow-card:hover{
-		box-shadow: 1px 1px 10px #111;
-	}
+	width: 45%;
+	aspect-ratio: 2/1;
+	background-color: rgb(96, 196, 160);
 }
 
+
 input[type=submit], input[type=reset]{
-	padding: 5px;
+	padding: 2px;
 	border-radius: 5px;
 }
 
@@ -48,4 +41,22 @@ input[type=submit]{
 }
 input[type=reset]{
 	background: crimson;
+}
+
+
+
+/*Classes*/
+.shadow-card{
+	box-shadow: 1px 1px 5px #111;
+}
+@media (hover: hover) and (pointer: fine) {
+	.shadow-card:hover{
+		box-shadow: 1px 1px 10px #111;
+	}
+}
+
+
+.form-buttons-div{
+	display: flex;
+	justify-content: space-between;
 }
