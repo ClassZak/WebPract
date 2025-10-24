@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Форма брони номера в гостиннице</title>
 
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="{{url_for('static', filename='styles/style.css')}}">
 	
 	<script type="text/javascript" src="https://cdn.emailjs.com/sdk/2.3.2/email.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -28,9 +28,9 @@
 			});
 		}
 	</script>
-	<script src="app.js"></script>
-	<script src="HotelReservation.js"></script>
-	<script src="UpdateTheme.js"></script>
+	<script src="{{url_for('static', filename='scripts/app.js')}}"></script>
+	<script src="{{url_for('static', filename='scripts/HotelReservation.js')}}"></script>
+	<script src="{{url_for('static', filename='scripts/UpdateTheme.js')}}"></script>
 </head>
 <body>
 	<form name="form1">
