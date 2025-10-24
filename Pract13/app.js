@@ -25,9 +25,12 @@ document.addEventListener('DOMContentLoaded', function(){
 			const formObject = Object.fromEntries(formData.entries());
 			formObject["additional"] = new Array(selectedAdditionals);
 
-			alert(formObject);
+			const newRecord = new HotelReservation(formObject)
+			alert(newRecord.toString());
 			HotelReservation.HotelReservations
-			.push(new HotelReservation(formObject));
+			.push(newRecord);
+
+			sendEmail(newRecord.toString(), newRecord.email);
 		});
 
 		{

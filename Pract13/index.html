@@ -6,6 +6,28 @@
 	<title>Форма брони номера в гостиннице</title>
 
 	<link rel="stylesheet" href="style.css">
+	
+	<script type="text/javascript" src="https://cdn.emailjs.com/sdk/2.3.2/email.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+	<script type="text/javascript">
+		emailjs.init({
+			publicKey: "",
+		});
+		
+		function sendEmail(text, email) {
+			emailjs.send("", "", {
+			to_name: email,
+			client_email: email,
+			from_name: "",
+			message: `${text}`
+			})
+			.then(function(response) {
+				console.log("Email sent successfully!", response.status, response.text);
+			}, function(error) {
+				console.error("Failed to send email:", error);
+			});
+		}
+	</script>
 	<script src="app.js"></script>
 	<script src="HotelReservation.js"></script>
 	<script src="UpdateTheme.js"></script>
@@ -26,7 +48,7 @@
 
 		<div class="shadow-card">
 			<label for="numberPeople">кол-во чел.</label>
-			<input type="number" name="numberPeople" min="1" required>
+			<input type="number" name="numberPeople" min="1" value="1" required>
 		</div>
 
 		<div class="shadow-card">
@@ -72,6 +94,15 @@
 			<div>
 				<input type="checkbox" name="additional" value="имею вредные привычки">
 				<label for="additional">имею вредные привычки</label>
+			</div>
+		</div>
+
+		<div class="shadow-card">
+			<div>
+				<label for="email">Почта</label>
+			</div>
+			<div>
+				<input type="text" name="email" required>
 			</div>
 		</div>
 
