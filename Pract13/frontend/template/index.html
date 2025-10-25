@@ -29,11 +29,16 @@
 		}
 	</script>
 	<script src="{{url_for('static', filename='scripts/app.js')}}"></script>
+	<script src="{{url_for('static', filename='scripts/Hotel.js')}}"></script>
 	<script src="{{url_for('static', filename='scripts/HotelReservation.js')}}"></script>
 	<script src="{{url_for('static', filename='scripts/UpdateTheme.js')}}"></script>
 </head>
 <body>
-	<form name="form1">
+	<form name="form1" action="/api/hotel_reservation/new" method="post">
+		<div class="shadow-card">
+			<label for="hotelSelect">Выберите отель</label>
+			<select name="hotel" id="hotelSelect" required></select>
+		</div>
 		<div class="shadow-card">
 			<label for="surname">ФИО</label>
 			<input type="text" name="surname" required>
@@ -111,6 +116,38 @@
 			<input type="reset" value="Очистить">
 		</div>
 	</form>
-	
+	<div class="container">
+		<div class="controls">
+			<input type="text" id="searchInput" placeholder="Поиск отелей...">
+			<select id="sortSelect">
+				<option value="name">По имени (А-Я)</option>
+				<option value="name_desc">По имени (Я-А)</option>
+				<option value="rooms">По комнатам (возр.)</option>
+				<option value="rooms_desc">По комнатам (убыв.)</option>
+			</select>
+		</div>
+		<div id="hotelsContainer"></div>
+	</div>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			setTimeout(async function(){
+				await Hotel.loadHotels();
+				
+				document.getElementById('searchInput').addEventListener('input', (e) => {
+				const filtered = Hotel.searchHotels(e.target.value);
+					const sorted = Hotel.sortHotels(filtered, document.getElementById('sortSelect').value);
+					Hotel.renderHotels(sorted);
+				});
+				
+				document.getElementById('sortSelect').addEventListener('change', (e) => {
+					const filtered = Hotel.searchHotels(document.getElementById('searchInput').value);
+					const sorted = Hotel.sortHotels(filtered, e.target.value);
+					Hotel.renderHotels(sorted);
+				});
+
+				await Hotel.setHotelSelect();
+			},6);
+		});
+	</script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 .vscode
 .tokens.ini
+.emailjsconfig.json
 .config.json
 visits.log

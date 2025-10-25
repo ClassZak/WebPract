@@ -1,4 +1,5 @@
 import os
+import requests
 from typing import Dict
 from flask import Flask, Request, json, render_template, request, jsonify
 from markupsafe import escape
@@ -13,7 +14,7 @@ from markupsafe import escape
 # Настройка CSRF
 from flask_wtf.csrf import CSRFProtect
 
-def get_app_config(filename:str='Pract13/backend/.config.json'):
+def load_app_config(filename:str='Pract13/backend/.config.json'):
 	with open(filename, 'r', encoding='UTF-8') as file:
 		return json.load(file)
 
@@ -22,8 +23,10 @@ app = Flask(
 	static_folder='../frontend/static',
 	template_folder='../frontend/template'
 )
-app.secret_key = get_app_config()['secret_key']
-csrf = CSRFProtect(app)
+
+CONFIG = load_app_config()
+#app.secret_key = CONFIG['secret_key']
+#csrf = CSRFProtect(app)
 
 
 
@@ -58,7 +61,7 @@ def track_visit():
 
 
 
-
+EMAILJS_CONFIG=load_app_config("Pract13/backend/.emailjsconfig.json")
 
 
 # Получение словаря из формы
@@ -68,7 +71,76 @@ def get_dict_from_request_form(request:Request) -> Dict:
 		for k in request.form.keys() 
 			for v in request.form.getlist(k)
 	}
-
+def send_email_via_emailjs(template_params, user_id=None, service_id=None, template_id=None, access_token=None):
+	"""
+	Отправляет email через EmailJS API
+	
+	Args:
+		template_params (dict): Параметры для шаблона письма
+		user_id (str): Public Key (user_id) из EmailJS
+		service_id (str): ID сервиса из EmailJS
+		template_id (str): ID шаблона из EmailJS
+		access_token (str): Private Key (accessToken) из EmailJS (опционально)
+	
+	Returns:
+		dict: Результат отправки
+	"""
+	
+	# EmailJS API endpoint
+	url = "https://api.emailjs.com/api/v1.0/email/send"
+	
+	# Подготовка данных
+	data = {
+		"user_id": user_id,
+		"service_id": service_id,
+		"template_id": template_id,
+		"template_params": template_params
+	}
+	
+	# Добавляем access_token если предоставлен (для приватных шаблонов)
+	headers = {
+		"Content-Type": "application/json"
+	}
+	if access_token:
+		headers["Authorization"] = f"Bearer {access_token}"
+	
+	try:
+		response = requests.post(url, json=data, headers=headers)
+		response.raise_for_status()
+		
+		return {
+			"success": True,
+			"message": "Письмо успешно отправлено",
+			"status_code": response.status_code
+		}
+		
+	except requests.exceptions.RequestException as e:
+		return {
+			"success": False,
+			"message": f"Ошибка отправки письма: {str(e)}",
+			"status_code": getattr(e.response, 'status_code', 500) if hasattr(e, 'response') else 500
+		}
+# Упрощенная функция
+def send_reservation_email(reservation_data, recipient_email, recipient_name):
+	"""
+	Отправляет email о бронировании
+	"""
+	template_params = {
+		"to_name": recipient_name,
+		"to_email": recipient_email,
+		"reservation_id": reservation_data.get('reservation_id'),
+		"hotel_name": reservation_data.get('hotel_name', 'Отель'),
+		"start_date": reservation_data.get('start_date'),
+		"end_date": reservation_data.get('end_date'),
+		"rooms_count": reservation_data.get('rooms_count'),
+		"number_people": reservation_data.get('number_people'),
+		"surname": reservation_data.get('surname')
+	}
+	
+	return send_email_via_emailjs(
+		template_params=template_params,
+		**EMAILJS_CONFIG
+	)
 
 
 # Маршруты
@@ -76,16 +148,166 @@ def get_dict_from_request_form(request:Request) -> Dict:
 def root():
 	return render_template('index.html')
 
-@app.route('/api/goods/new/',methods=['GET'])
-def new_goods_route():
-#	try:
-#		return good_service.read_new_goods()
-#	except Exception as e:
-#		return jsonify({'error': 'Internal Server Error'}), 500
-	pass
+@app.route('/api/hotel_reservation/new', methods=['POST'])
+def hotel_reservation_new():
+	data = get_dict_from_request_form(request)
+	try:
+		if not data:
+			data = request.get_json()
+
+		connection = mysql.connector.connect(
+			host=CONFIG['host'],
+			user=CONFIG['user'],
+			password=CONFIG['password'],
+			database=CONFIG['database'],
+			charset='utf8mb4',
+			collation='utf8mb4_unicode_ci',
+		)
+		cursor = connection.cursor(dictionary=True)
+
+		# Проверяем доступность комнат
+		check_query = """
+			SELECT 
+				h.RoomsCount AS total_rooms,
+				COALESCE(SUM(hr.RoomsCount), 0) AS booked_rooms
+			FROM Hotel h
+			LEFT JOIN HotelReservation hr ON 
+				h.Id = hr.IdHotel 
+				AND NOT (hr.EndDate <= %s OR hr.StartDate >= %s)
+			WHERE h.Id = %s
+			GROUP BY h.Id
+			HAVING total_rooms - booked_rooms >= %s
+		"""
+		cursor.execute(check_query, (
+			data['inputDate'],  # Начало новой брони
+			data['inputDate2'], # Конец новой брони
+			data['hotel'],
+			data['rooms_count']
+		))
+		availability = cursor.fetchone()
+
+		if not availability:
+			return jsonify({
+				'success': False,
+				'message': 'Недостаточно свободных комнат на выбранные даты'
+			}), 400
+
+		# Получаем ID возрастной категории
+		query = """
+			SELECT Id AS id
+			FROM AgeDescription
+			WHERE `Name` = %s
+		"""
+		cursor.execute(query, (data['age'],))
+		age_result = cursor.fetchone()
+		if not age_result:
+			return jsonify({
+				'success': False,
+				'message': 'Указана неверная возрастная категория'
+			}), 400
+		age_desc_id = age_result['id']
+
+		# Добавляем бронирование
+		query = """
+			INSERT INTO HotelReservation 
+			(IdHotel, Surname, NumberPeople, RoomsCount, StartDate, EndDate, Email, IdAgeDescription)
+			VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+		"""
+		cursor.execute(query, (
+			data['hotel'],
+			data['surname'],
+			data['numberPeople'],
+			data['rooms_count'],
+			data['inputDate'],
+			data['inputDate2'],
+			data['email'],
+			age_desc_id
+		))
+		reservation_id = cursor.lastrowid
+
+		# Обрабатываем дополнительные услуги
+		if data.get('additional'):
+			query = """
+				SELECT Id AS id
+				FROM HotelReservationAdditional
+				WHERE `Name` IN ({})
+			""".format(','.join(['%s'] * len(data['additional'][0])))
+			cursor.execute(query, data['additional'][0])
+			additional_ids = [row['id'] for row in cursor.fetchall()]
+
+			# Связываем услуги с бронированием
+			link_query = """
+				INSERT INTO HotelReservation_HotelReservationAdditional
+				(IdHotelReservation, IdHotelReservationAdditional)
+				VALUES (%s, %s)
+			"""
+			for add_id in additional_ids:
+				cursor.execute(link_query, (reservation_id, add_id))
+
+		connection.commit()
+
+		# После успешного бронирования отправляем email
+		email_result = send_email_via_emailjs(
+			template_params={
+				"to_name": data['surname'],
+				"to_email": data['email'],
+				"hotel_name": "Название отеля",  # Здесь нужно получить название отеля из БД
+				"reservation_id": reservation_id,
+				"start_date": data['inputDate'],
+				"end_date": data['inputDate2'],
+				"rooms_count": data['rooms_count'],
+				"number_people": data['numberPeople']
+			},
+			user_id=EMAILJS_CONFIG['puplic_key'],
+			service_id=EMAILJS_CONFIG['service_key'],  # Замените на ваш Service ID
+			template_id=EMAILJS_CONFIG['template_key'],  # Замените на ваш Template ID
+			access_token="your_private_key_here"  # Опционально, для приватных шаблонов
+		)
+
+		if not email_result['success']:
+			print(f"Ошибка отправки email: {email_result['message']}")
+
+		return jsonify({
+			'message': 'Бронирование успешно создано',
+			'reservation_id': reservation_id
+		}), 201
+
+	except Exception as e:
+		if 'connection' in locals():
+			connection.rollback()
+		print(f"Ошибка: {str(e)}")
+		return jsonify({
+			'error': 'Внутренняя ошибка сервера'
+		}), 500
+	finally:
+		if 'cursor' in locals():
+			cursor.close()
+		if 'connection' in locals():
+			connection.close()
 	
 
-
+@app.route('/api/hotels',methods=['GET'])
+def hotels():
+	connection = mysql.connector.connect(
+		host	 = CONFIG['host'],
+		user	 = CONFIG['user'],
+		password = CONFIG['password'],
+		database = CONFIG['database'],
+		charset	 ='utf8mb4',
+		collation='utf8mb4_unicode_ci',
+	)
+	cursor = connection.cursor(dictionary=True)
+	query = """
+		SELECT Id as id, `Name` as name, `Description` as description, RoomsCount as roomsCount
+		FROM Hotel
+	"""
+	cursor.execute(query)
+	raw_data = cursor.fetchall()
+	return jsonify({'hotels':[{
+			key : row[key] for key in row.keys()
+		}
+		for row in raw_data
+	]})
 
 # Точка входа
 def main():
@@ -93,11 +315,10 @@ def main():
 		global log_path
 		with open('Pract13/backend/.config.json', 'r', encoding='UTF-8') as file:
 			config=json.load(file)
-			
 			log_path = config['log_file'] if 'log_file' in config.keys() else 'visits.log'
 
 		
-		app.run(debug=True, host='0.0.0.0', port=5000)
+		app.run(debug=True, host='0.0.0.0', port=5001)
 	except Exception as e:
 		pass
 

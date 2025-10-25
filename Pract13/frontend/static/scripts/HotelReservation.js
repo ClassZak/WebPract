@@ -13,6 +13,7 @@ class HotelReservation{
 		this.additional		= data.additional	|| '';
 		this.age			= data.age			|| '';
 		this.email			= data.email		|| '';
+		this.hotel			= data.hotel		|| 0;
 	}
 	toString() {
 		return `Бронь отеля: 
@@ -21,6 +22,7 @@ class HotelReservation{
 Количество человек ${this.numberPeople}
 Количество комнат ${this.rooms_count}
 Возраст: ${this.age}
-Дополнительно: ${this.additional}`;
+Дополнительно: ${this.additional}
+Отель: ${Hotel.Hotels.find(element=>element.id==this.hotel)}`;
 	}
 }

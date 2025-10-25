@@ -30,7 +30,25 @@ document.addEventListener('DOMContentLoaded', function(){
 			HotelReservation.HotelReservations
 			.push(newRecord);
 
-			sendEmail(newRecord.toString(), newRecord.email);
+			//sendEmail(newRecord.toString(), newRecord.email);
+			fetch(this.action, {
+				method : this.method,
+				headers:{'Content-Type': 'application/json',},
+				body:JSON.stringify(newRecord)}
+			)
+			.then(async response=>{
+				try{
+					let data = await response.json();
+					return data;
+				}catch(error){
+					throw error;
+				}
+			})
+			.then(data=>{
+				if(data.error)
+					throw error;
+				console.log('fghfgh')
+			});
 		});
 
 		{

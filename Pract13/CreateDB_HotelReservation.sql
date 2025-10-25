@@ -28,6 +28,7 @@ CREATE TABLE HotelReservation(
 	RoomsCount			INT NOT NULL,
 	StartDate			DATE,
 	EndDate				DATE,
+	Email				VARCHAR(100) NOT NULL,
 	IdAgeDescription	INT NOT NULL
 );
 ALTER TABLE HotelReservation
