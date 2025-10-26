@@ -71,41 +71,26 @@ def get_dict_from_request_form(request:Request) -> Dict:
 		for k in request.form.keys() 
 			for v in request.form.getlist(k)
 	}
-def send_email_via_emailjs(template_params, user_id=None, service_id=None, template_id=None, access_token=None):
+def send_simple_email(public_key, service_id, template_id, to_email, message, from_name="Hotel Reservation"):
 	"""
-	Отправляет email через EmailJS API
-	
-	Args:
-		template_params (dict): Параметры для шаблона письма
-		user_id (str): Public Key (user_id) из EmailJS
-		service_id (str): ID сервиса из EmailJS
-		template_id (str): ID шаблона из EmailJS
-		access_token (str): Private Key (accessToken) из EmailJS (опционально)
-	
-	Returns:
-		dict: Результат отправки
+	Простая отправка email через EmailJS (аналог вашего JS кода)
 	"""
-	
-	# EmailJS API endpoint
 	url = "https://api.emailjs.com/api/v1.0/email/send"
 	
-	# Подготовка данных
 	data = {
-		"user_id": user_id,
+		"user_id": public_key,
 		"service_id": service_id,
 		"template_id": template_id,
-		"template_params": template_params
+		"template_params": {
+			"to_name": to_email,
+			"client_email": to_email,
+			"from_name": from_name,
+			"message": message
+		}
 	}
-	
-	# Добавляем access_token если предоставлен (для приватных шаблонов)
-	headers = {
-		"Content-Type": "application/json"
-	}
-	if access_token:
-		headers["Authorization"] = f"Bearer {access_token}"
 	
 	try:
-		response = requests.post(url, json=data, headers=headers)
+		response = requests.post(url, json=data)
 		response.raise_for_status()
 		
 		return {
@@ -115,32 +100,14 @@ def send_email_via_emailjs(template_params, user_id=None, service_id=None, templ
 		}
 		
 	except requests.exceptions.RequestException as e:
+		error_msg = f"Ошибка отправки письма: {str(e)}"
+		if hasattr(e, 'response') and e.response is not None:
+			error_msg += f" - Response: {e.response.text}"
 		return {
 			"success": False,
-			"message": f"Ошибка отправки письма: {str(e)}",
+			"message": error_msg,
 			"status_code": getattr(e.response, 'status_code', 500) if hasattr(e, 'response') else 500
 		}
-# Упрощенная функция
-def send_reservation_email(reservation_data, recipient_email, recipient_name):
-	"""
-	Отправляет email о бронировании
-	"""
-	template_params = {
-		"to_name": recipient_name,
-		"to_email": recipient_email,
-		"reservation_id": reservation_data.get('reservation_id'),
-		"hotel_name": reservation_data.get('hotel_name', 'Отель'),
-		"start_date": reservation_data.get('start_date'),
-		"end_date": reservation_data.get('end_date'),
-		"rooms_count": reservation_data.get('rooms_count'),
-		"number_people": reservation_data.get('number_people'),
-		"surname": reservation_data.get('surname')
-	}
-	
-	return send_email_via_emailjs(
-		template_params=template_params,
-		**EMAILJS_CONFIG
-	)
 
 
 # Маршруты
@@ -179,8 +146,8 @@ def hotel_reservation_new():
 			HAVING total_rooms - booked_rooms >= %s
 		"""
 		cursor.execute(check_query, (
-			data['inputDate'],  # Начало новой брони
-			data['inputDate2'], # Конец новой брони
+			data['inputDate'],
+			data['inputDate2'],
 			data['hotel'],
 			data['rooms_count']
 		))
@@ -247,21 +214,23 @@ def hotel_reservation_new():
 		connection.commit()
 
 		# После успешного бронирования отправляем email
-		email_result = send_email_via_emailjs(
-			template_params={
-				"to_name": data['surname'],
-				"to_email": data['email'],
-				"hotel_name": "Название отеля",  # Здесь нужно получить название отеля из БД
-				"reservation_id": reservation_id,
-				"start_date": data['inputDate'],
-				"end_date": data['inputDate2'],
-				"rooms_count": data['rooms_count'],
-				"number_people": data['numberPeople']
-			},
-			user_id=EMAILJS_CONFIG['puplic_key'],
-			service_id=EMAILJS_CONFIG['service_key'],  # Замените на ваш Service ID
-			template_id=EMAILJS_CONFIG['template_key'],  # Замените на ваш Template ID
-			access_token="your_private_key_here"  # Опционально, для приватных шаблонов
+		email_text = f"""
+		Подтверждение бронирования #{reservation_id}
+		
+		Фамилия: {data['surname']}
+		Количество гостей: {data['numberPeople']}
+		Количество комнат: {data['rooms_count']}
+		Дата заезда: {data['inputDate']}
+		Дата выезда: {data['inputDate2']}
+		"""
+
+		email_result = send_simple_email(
+			public_key=EMAILJS_CONFIG['puplic_key'], 
+			service_id=EMAILJS_CONFIG['service_key'],
+			template_id=EMAILJS_CONFIG['template_key'], 
+			to_email=data['email'],
+			message=email_text,
+			from_name="Отель"
 		)
 
 		if not email_result['success']:
