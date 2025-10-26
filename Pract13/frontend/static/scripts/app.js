@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', function(){
 			const selectedAdditionals = formData.getAll('additional');
 			console.log(selectedAdditionals);
 			const formObject = Object.fromEntries(formData.entries());
-			formObject["additional"] = new Array(selectedAdditionals);
-
+			formObject["additional"] = selectedAdditionals;
+			
 			const newRecord = new HotelReservation(formObject)
 			alert(newRecord.toString());
 			HotelReservation.HotelReservations

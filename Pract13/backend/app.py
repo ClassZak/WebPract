@@ -198,8 +198,8 @@ def hotel_reservation_new():
 				SELECT Id AS id
 				FROM HotelReservationAdditional
 				WHERE `Name` IN ({})
-			""".format(','.join(['%s'] * len(data['additional'][0])))
-			cursor.execute(query, data['additional'][0])
+			""".format(','.join(['%s'] * len(data['additional'])))
+			cursor.execute(query, data['additional'])
 			additional_ids = [row['id'] for row in cursor.fetchall()]
 
 			# Связываем услуги с бронированием
@@ -219,10 +219,14 @@ def hotel_reservation_new():
 		
 		Фамилия: {data['surname']}
 		Количество гостей: {data['numberPeople']}
+		Возраст гостей: {data['age']}
 		Количество комнат: {data['rooms_count']}
 		Дата заезда: {data['inputDate']}
 		Дата выезда: {data['inputDate2']}
 		"""
+		if data.get('additional'):
+			email_text += f"""Дополинительно:
+			{'\n'.join([additional.capitalize() for additional in data['additional']])}"""
 
 		email_result = send_simple_email(
 			public_key=EMAILJS_CONFIG['puplic_key'], 
