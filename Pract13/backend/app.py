@@ -72,9 +72,6 @@ def get_dict_from_request_form(request:Request) -> Dict:
 			for v in request.form.getlist(k)
 	}
 def send_simple_email(public_key, service_id, template_id, to_email, message, from_name="Hotel Reservation"):
-	"""
-	Простая отправка email через EmailJS (аналог вашего JS кода)
-	"""
 	url = "https://api.emailjs.com/api/v1.0/email/send"
 	
 	data = {
