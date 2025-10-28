@@ -1,2 +1,2 @@
 #!/bin/bash
-python Pract13/backend/app.py
+python3 Pract13/backend/app.py
