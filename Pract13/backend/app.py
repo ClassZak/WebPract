@@ -14,6 +14,8 @@ from markupsafe import escape
 # Настройка CSRF
 from flask_wtf.csrf import CSRFProtect
 
+
+print(os.getcwd())
 def load_app_config(filename:str='Pract13/backend/.config.json'):
 	with open(filename, 'r', encoding='UTF-8') as file:
 		return json.load(file)
@@ -115,10 +117,10 @@ def root():
 @app.route('/api/hotel_reservation/new', methods=['POST'])
 def hotel_reservation_new():
 	data = get_dict_from_request_form(request)
-	try:
-		if not data:
-			data = request.get_json()
+	if not data:
+		data = request.get_json()
 
+	try:
 		connection = mysql.connector.connect(
 			host=CONFIG['host'],
 			user=CONFIG['user'],
@@ -226,7 +228,7 @@ def hotel_reservation_new():
 			{'\n'.join([additional.capitalize() for additional in data['additional']])}"""
 
 		email_result = send_simple_email(
-			public_key=EMAILJS_CONFIG['puplic_key'], 
+			public_key=EMAILJS_CONFIG['public_key'], 
 			service_id=EMAILJS_CONFIG['service_key'],
 			template_id=EMAILJS_CONFIG['template_key'], 
 			to_email=data['email'],
@@ -255,29 +257,72 @@ def hotel_reservation_new():
 		if 'connection' in locals():
 			connection.close()
 	
+@app.route('/admin')
+def admin():
+	return render_template('admin.html')
 
-@app.route('/api/hotels',methods=['GET'])
+@app.route('/api/hotels',methods=['GET', 'POST', 'DELETE'])
 def hotels():
-	connection = mysql.connector.connect(
-		host	 = CONFIG['host'],
-		user	 = CONFIG['user'],
-		password = CONFIG['password'],
-		database = CONFIG['database'],
-		charset	 ='utf8mb4',
-		collation='utf8mb4_unicode_ci',
-	)
-	cursor = connection.cursor(dictionary=True)
-	query = """
-		SELECT Id as id, `Name` as name, `Description` as description, RoomsCount as roomsCount
-		FROM Hotel
-	"""
-	cursor.execute(query)
-	raw_data = cursor.fetchall()
-	return jsonify({'hotels':[{
-			key : row[key] for key in row.keys()
-		}
-		for row in raw_data
-	]})
+	try:
+		connection = mysql.connector.connect(
+			host	 = CONFIG['host'],
+			user	 = CONFIG['user'],
+			password = CONFIG['password'],
+			database = CONFIG['database'],
+			charset	 ='utf8mb4',
+			collation='utf8mb4_unicode_ci',
+		)
+		cursor = connection.cursor(dictionary=True)
+		if request.method == 'GET':
+			query = """
+				SELECT Id AS id, `Name` AS name, `Description` AS description, RoomsCount AS roomsCount
+				FROM Hotel
+			"""
+			cursor.execute(query)
+			raw_data = cursor.fetchall()
+			return jsonify({'hotels':[{
+					key : row[key] for key in row.keys()
+				}
+				for row in raw_data
+			]})
+		elif request.method == 'POST':
+			data = get_dict_from_request_form(request)
+			if not data:
+				data = request.get_json()
+			query = f"""
+				INSERT INTO Hotel (`Name`, `Description`, RoomsCount) VALUES
+				({','.join(['%s'] * 3)})
+			"""
+			cursor.execute(query, (data['name'],data['description'],data['roomsCount']))
+
+			connection.commit()
+			return jsonify({'message' : "Создано успешно"}), 201
+		elif request.method == 'DELETE':
+			data = get_dict_from_request_form(request)
+			if not data:
+				data = request.get_json()
+			id_for_delete = data['id']
+
+			query = """
+				DELETE FROM Hotel
+				WHERE Id = %s
+			"""
+			cursor.execute(query, (id_for_delete,))
+
+			connection.commit()
+			return jsonify({'message' : "Удалено успешно"}), 200
+	except Exception as e:
+		if 'connection' in locals():
+			connection.rollback()
+		print(f"Ошибка: {str(e)}")
+		return jsonify({
+			'error': 'Внутренняя ошибка сервера'
+		}), 500
+	finally:
+		if 'cursor' in locals():
+			cursor.close()
+		if 'connection' in locals():
+			connection.close()
 
 # Точка входа
 def main():
