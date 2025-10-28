@@ -261,7 +261,7 @@ def hotel_reservation_new():
 def admin():
 	return render_template('admin.html')
 
-@app.route('/api/hotels',methods=['GET', 'POST', 'DELETE'])
+@app.route('/api/hotels', methods=['GET', 'POST', 'DELETE', 'PUT'])
 def hotels():
 	try:
 		connection = mysql.connector.connect(
@@ -297,6 +297,23 @@ def hotels():
 
 			connection.commit()
 			return jsonify({'message' : "Создано успешно"}), 201
+		elif request.method == 'PUT':
+			data = get_dict_from_request_form(request)
+			if not data:
+				data = request.get_json()
+			
+			if 'id' not in data:
+				return jsonify({'error': 'ID is required for update'}), 400
+				
+			query = """
+				UPDATE Hotel 
+				SET `Name` = %s, `Description` = %s, RoomsCount = %s 
+				WHERE Id = %s
+			"""
+			cursor.execute(query, (data['name'], data['description'], data['roomsCount'], data['id']))
+			
+			connection.commit()
+			return jsonify({'message': "Обновлено успешно"}), 200
 		elif request.method == 'DELETE':
 			data = get_dict_from_request_form(request)
 			if not data:
