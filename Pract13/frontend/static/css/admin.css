@@ -1,0 +1,313 @@
+/* Стили из предыдущего ответа для админ-панели */
+:root {
+	--primary-color: #3498db;
+	--secondary-color: #2980b9;
+	--success-color: #27ae60;
+	--danger-color: #e74c3c;
+	--warning-color: #f39c12;
+	--light-color: #ecf0f1;
+	--dark-color: #2c3e50;
+	--gray-color: #95a5a6;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+	background-color: #f5f7fa;
+	color: #333;
+	line-height: 1.6;
+}
+
+.navbar {
+	background-color: var(--dark-color);
+	color: white;
+	padding: 15px 0;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.nav-logo {
+	font-size: 24px;
+	font-weight: 600;
+}
+
+.nav-links {
+	display: flex;
+	gap: 20px;
+}
+
+.nav-links a {
+	color: white;
+	text-decoration: none;
+	padding: 8px 16px;
+	border-radius: 4px;
+	transition: background-color 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+	background-color: var(--primary-color);
+}
+
+.admin-container {
+	max-width: 1200px;
+	margin: 30px auto;
+	padding: 0 20px;
+}
+
+.admin-tabs {
+	display: flex;
+	margin-bottom: 20px;
+	border-bottom: 1px solid #ddd;
+}
+
+.tab-button {
+	padding: 12px 24px;
+	background: none;
+	border: none;
+	border-bottom: 3px solid transparent;
+	cursor: pointer;
+	font-size: 16px;
+	transition: all 0.3s;
+}
+
+.tab-button.active {
+	border-bottom-color: var(--primary-color);
+	color: var(--primary-color);
+	font-weight: 500;
+}
+
+.tab-content {
+	display: none;
+}
+
+.tab-content.active {
+	display: block;
+}
+
+.card {
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+	padding: 20px;
+	margin-bottom: 20px;
+}
+
+.card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #eee;
+}
+
+.card-title {
+	font-size: 18px;
+	font-weight: 600;
+	color: var(--dark-color);
+}
+
+.btn {
+	padding: 10px 20px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-weight: 500;
+	transition: all 0.3s ease;
+	text-decoration: none;
+	display: inline-block;
+	text-align: center;
+}
+
+.btn-primary {
+	background-color: var(--primary-color);
+	color: white;
+}
+
+.btn-primary:hover {
+	background-color: var(--secondary-color);
+}
+
+.btn-success {
+	background-color: var(--success-color);
+	color: white;
+}
+
+.btn-danger {
+	background-color: var(--danger-color);
+	color: white;
+}
+
+.btn-warning {
+	background-color: var(--warning-color);
+	color: white;
+}
+
+.btn-secondary {
+	background-color: var(--gray-color);
+	color: white;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th, td {
+	padding: 12px 15px;
+	text-align: left;
+	border-bottom: 1px solid #eee;
+}
+
+th {
+	background-color: #f8f9fa;
+	font-weight: 600;
+	color: var(--dark-color);
+}
+
+tr:hover {
+	background-color: #f8f9fa;
+}
+
+.form-group {
+	margin-bottom: 20px;
+}
+
+label {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 500;
+}
+
+input, textarea {
+	width: 100%;
+	padding: 12px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+textarea {
+	min-height: 100px;
+	resize: vertical;
+}
+
+.modal {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 1000;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal-content {
+	background: white;
+	border-radius: 8px;
+	width: 90%;
+	max-width: 600px;
+	padding: 20px;
+	box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #eee;
+}
+
+.modal-title {
+	font-size: 20px;
+	font-weight: 600;
+}
+
+.close {
+	font-size: 24px;
+	cursor: pointer;
+	color: var(--gray-color);
+}
+
+.close:hover {
+	color: var(--dark-color);
+}
+
+.modal-footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	margin-top: 20px;
+	padding-top: 15px;
+	border-top: 1px solid #eee;
+}
+
+.alert {
+	padding: 12px 15px;
+	border-radius: 4px;
+	margin-bottom: 20px;
+}
+
+.alert-success {
+	background-color: #d4edda;
+	color: #155724;
+	border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+	background-color: #f8d7da;
+	color: #721c24;
+	border: 1px solid #f5c6cb;
+}
+
+.action-buttons {
+	display: flex;
+	gap: 8px;
+}
+
+.empty-state {
+	text-align: center;
+	padding: 40px 20px;
+	color: var(--gray-color);
+}
+
+.empty-state i {
+	font-size: 48px;
+	margin-bottom: 15px;
+	color: #ddd;
+}
+
+@media (max-width: 768px) {
+	.action-buttons {
+		flex-direction: column;
+	}
+	
+	th, td {
+		padding: 8px 10px;
+	}
+	
+	.card-header {
+		flex-direction: column;
+		gap: 15px;
+		align-items: flex-start;
+	}
+}

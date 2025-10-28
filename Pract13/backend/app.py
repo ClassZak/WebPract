@@ -341,6 +341,39 @@ def hotels():
 		if 'connection' in locals():
 			connection.close()
 
+# API для получения всех бронирований
+@app.route('/api/reservations', methods=['GET'])
+def get_reservations():
+    try:
+        connection = mysql.connector.connect(
+			host	 = CONFIG['host'],
+			user	 = CONFIG['user'],
+			password = CONFIG['password'],
+			database = CONFIG['database'],
+			charset	 ='utf8mb4',
+			collation='utf8mb4_unicode_ci',
+		)
+        cursor = connection.cursor(dictionary=True)
+        
+        query = """
+            SELECT r.*, h.Name as hotel_name 
+            FROM HotelReservation r 
+            LEFT JOIN Hotel h ON r.IdHotel = h.Id 
+            ORDER BY r.StartDate DESC
+        """
+        cursor.execute(query)
+        reservations = cursor.fetchall()
+        
+        return jsonify({'reservations': reservations})
+        
+    except Exception as e:
+        print(f"Ошибка при получении бронирований: {str(e)}")
+        return jsonify({'error': 'Ошибка сервера'}), 500
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
 # Точка входа
 def main():
 	try:

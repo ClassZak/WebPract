@@ -1,0 +1,253 @@
+:root {
+	--primary-color: #3498db;
+	--secondary-color: #2980b9;
+	--success-color: #27ae60;
+	--danger-color: #e74c3c;
+	--warning-color: #f39c12;
+	--light-color: #ecf0f1;
+	--dark-color: #2c3e50;
+	--gray-color: #95a5a6;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+	background-color: #f5f7fa;
+	color: #333;
+	line-height: 1.6;
+}
+
+.navbar {
+	background-color: var(--dark-color);
+	color: white;
+	padding: 15px 0;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.nav-logo {
+	font-size: 24px;
+	font-weight: 600;
+}
+
+.nav-links {
+	display: flex;
+	gap: 20px;
+}
+
+.nav-links a {
+	color: white;
+	text-decoration: none;
+	padding: 8px 16px;
+	border-radius: 4px;
+	transition: background-color 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+	background-color: var(--primary-color);
+}
+
+form {
+	max-width: 600px;
+	margin: 30px auto;
+	padding: 30px;
+	border-radius: 12px;
+	background: white;
+	box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.shadow-card {
+	padding: 15px;
+	margin-bottom: 20px;
+	border-radius: 8px;
+	background: #f8f9fa;
+	border: 1px solid #e9ecef;
+	transition: box-shadow 0.3s ease;
+}
+
+.shadow-card:hover {
+	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+label {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 500;
+	color: var(--dark-color);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+select {
+	width: 100%;
+	padding: 12px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	font-size: 16px;
+	transition: border-color 0.3s;
+}
+
+input:focus,
+select:focus {
+	outline: none;
+	border-color: var(--primary-color);
+	box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.radio-group,
+.checkbox-group {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.radio-group > div,
+.checkbox-group > div {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.radio-group input[type="radio"],
+.checkbox-group input[type="checkbox"] {
+	width: auto;
+}
+
+.form-buttons-div {
+	display: flex;
+	justify-content: space-between;
+	gap: 15px;
+}
+
+.btn-primary,
+.btn-secondary {
+	padding: 12px 24px;
+	border: none;
+	border-radius: 6px;
+	font-size: 16px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	flex: 1;
+}
+
+.btn-primary {
+	background-color: var(--primary-color);
+	color: white;
+}
+
+.btn-primary:hover {
+	background-color: var(--secondary-color);
+}
+
+.btn-secondary {
+	background-color: var(--gray-color);
+	color: white;
+}
+
+.btn-secondary:hover {
+	background-color: #7f8c8d;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 40px auto;
+	padding: 0 20px;
+}
+
+.container h2 {
+	text-align: center;
+	margin-bottom: 30px;
+	color: var(--dark-color);
+}
+
+.controls {
+	margin-bottom: 30px;
+	display: flex;
+	gap: 15px;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+#searchInput {
+	flex: 1;
+	max-width: 400px;
+}
+
+#sortSelect {
+	width: 250px;
+}
+
+.hotel-card {
+	border: 1px solid #e9ecef;
+	border-radius: 8px;
+	padding: 20px;
+	margin-bottom: 15px;
+	background: white;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hotel-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.hotel-name {
+	font-size: 1.3em;
+	font-weight: bold;
+	margin-bottom: 10px;
+	color: var(--dark-color);
+}
+
+.hotel-description {
+	color: #666;
+	margin-bottom: 10px;
+	line-height: 1.5;
+}
+
+.hotel-rooms {
+	color: var(--primary-color);
+	font-weight: 500;
+}
+
+@media (max-width: 768px) {
+	.nav-container {
+		flex-direction: column;
+		gap: 15px;
+	}
+	
+	form {
+		margin: 20px;
+		padding: 20px;
+	}
+	
+	.form-buttons-div {
+		flex-direction: column;
+	}
+	
+	.controls {
+		flex-direction: column;
+	}
+	
+	#searchInput,
+	#sortSelect {
+		max-width: none;
+		width: 100%;
+	}
+}

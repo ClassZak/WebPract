@@ -6,11 +6,11 @@ class Hotel {
 		this.id = data.id || '';
 		this.name = data.name || '';
 		this.description = data.description || '';
-		this.roomsCount = data.roomsCount || '';
+		this.roomsCount = data.roomsCount || data.rooms_count || '';
 	}
 
 	toString() {
-		return `${this.name}\n${this.description}\n${this.roomsCount}`;
+		return `${this.name}\n${this.description}\nКомнат: ${this.roomsCount}`;
 	}
 
 	static async loadHotels() {
@@ -27,8 +27,13 @@ class Hotel {
 			
 			this.Hotels = data.hotels.map(h => new Hotel(h));
 			this.renderHotels();
+			return this.Hotels;
 		} catch (error) {
 			console.error('Ошибка загрузки отелей:', error);
+			// Загрузка демо-данных при ошибке
+			this.Hotels = this.getDemoHotels();
+			this.renderHotels();
+			return this.Hotels;
 		}
 	}
 
@@ -55,19 +60,21 @@ class Hotel {
 	}
 
 	static async setHotelSelect(){
-		const select=document.getElementById('hotelSelect');
-		setTimeout(function(){
-			try{
-				Hotel.Hotels.forEach(element => {
-					let option = document.createElement('option');
-					option.setAttribute('value', element.id);
-					option.textContent = element.name;
-					select.appendChild(option);
-				});
-			} catch(error){
-				console.log(err);
-			}
-		},5);
+		const select = document.getElementById('hotelSelect');
+		if (!select) return;
+		
+		try {
+			const hotels = await this.loadHotels();
+			
+			hotels.forEach(element => {
+				let option = document.createElement('option');
+				option.setAttribute('value', element.id);
+				option.textContent = element.name;
+				select.appendChild(option);
+			});
+		} catch(error){
+			console.error('Ошибка при установке select:', error);
+		}
 	}
 
 	static escapeHtml(unsafe) {
@@ -82,14 +89,15 @@ class Hotel {
 
 	static searchHotels(query) {
 		const searchTerm = query.toLowerCase().trim();
-		if (!searchTerm)
-			return this.Hotels;
-		let roomsCount = parseInt(searchTerm);
+		if (!searchTerm) return this.Hotels;
+		
+		const roomsCount = parseInt(searchTerm);
+		const isNumber = !isNaN(roomsCount);
 
 		return this.Hotels.filter(hotel =>
 			hotel.name.toLowerCase().includes(searchTerm) ||
 			hotel.description.toLowerCase().includes(searchTerm) ||
-			(roomsCount !== NaN && new String(hotel.roomsCount).includes(roomsCount))
+			(isNumber && hotel.roomsCount.toString().includes(roomsCount.toString()))
 		);
 	}
 

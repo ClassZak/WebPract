@@ -1,60 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Форма брони номера в гостиннице</title>
-
-	<link rel="icon" type="image/x-icon" href="{{url_for('static', filename='favicon.ico')}}">
-
-	<link rel="stylesheet" href="{{url_for('static', filename='styles/style.css')}}">
+	<title>Форма бронирования номера в гостинице</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	<link rel="icon" href="{{url_for('static', filename='favicon.ico')}}" type="image/x-icon">
 	
 	<script type="text/javascript" src="https://cdn.emailjs.com/sdk/2.3.2/email.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 	<script type="text/javascript">
 		emailjs.init({
-			publicKey: "",
+			publicKey: "YOUR_PUBLIC_KEY",
 		});
 		
 		function sendEmail(text, email) {
-			emailjs.send("", "", {
-			to_name: email,
-			client_email: email,
-			from_name: "",
-			message: `${text}`
-			})
-			.then(function(response) {
+			emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+				to_name: email,
+				client_email: email,
+				from_name: "Hotel Booking System",
+				message: text
+			}).then(function(response) {
 				console.log("Email sent successfully!", response.status, response.text);
 			}, function(error) {
 				console.error("Failed to send email:", error);
 			});
 		}
 	</script>
-	<script src="{{url_for('static', filename='scripts/app.js')}}"></script>
-	<script src="{{url_for('static', filename='scripts/Hotel.js')}}"></script>
-	<script src="{{url_for('static', filename='scripts/HotelReservation.js')}}"></script>
-	<script src="{{url_for('static', filename='scripts/UpdateTheme.js')}}"></script>
 </head>
 <body>
+	<nav class="navbar">
+		<div class="nav-container">
+			<div class="nav-logo">Отель Бронирование</div>
+			<div class="nav-links">
+				<a href="/">Бронирование</a>
+				<a href="/admin">Админ-панель</a>
+			</div>
+		</div>
+	</nav>
+
 	<form name="form1" action="/api/hotel_reservation/new" method="post">
 		<div class="shadow-card">
 			<label for="hotelSelect">Выберите отель</label>
-			<select name="hotel" id="hotelSelect" required></select>
+			<select name="hotel" id="hotelSelect" required>
+			</select>
 		</div>
+		
 		<div class="shadow-card">
 			<label for="surname">ФИО</label>
 			<input type="text" name="surname" required>
 		</div>
 
 		<div class="shadow-card">
-			<label for="inputDate">с</label>
+			<label for="inputDate">Дата заезда</label>
 			<input type="date" name="inputDate" required onchange="handler(event);">
-			<label for="inputDate2">по</label>
+			<label for="inputDate2">Дата выезда</label>
 			<input type="date" name="inputDate2" required>
 		</div>
 
 		<div class="shadow-card">
-			<label for="numberPeople">кол-во чел.</label>
+			<label for="numberPeople">Количество человек</label>
 			<input type="number" name="numberPeople" min="1" value="1" required>
 		</div>
 
@@ -69,56 +73,54 @@
 		</div>
 
 		<div class="shadow-card">
-			<div>
-				<label for="age">возраст</label>
-			</div>
-			<div>
-				<input type="radio" name="age" value="0-4" checked>
-				<label for="age">0-4</label>
-			</div>
-			<div>
-				<input type="radio" name="age" value="5-17">
-				<label for="age">5-17</label>
-			</div>
-			<div>
-				<input type="radio" name="age" value="18 и cтарше">
-				<label for="age">18 и старше</label>
-			</div>
-		</div>
-
-		<div class="shadow-card">
-			<div>
-				<label for="additional">Доп. сообщаю</label>
-			</div>
-			<div>
-				<input type="checkbox" name="additional" value="нуждаюсь в парковке">
-				<label for="additional">нуждаюсь в парковке</label>
-			</div>
-			<div>
-				<input type="checkbox" name="additional" value="заселюсь с дом. питомцем">
-				<label for="additional">заселюсь с дом. питомцем</label>
-			</div>
-			<div>
-				<input type="checkbox" name="additional" value="имею вредные привычки">
-				<label for="additional">имею вредные привычки</label>
+			<div class="radio-group">
+				<label>Возрастная группа</label>
+				<div>
+					<input type="radio" name="age" value="0-4" id="age1" checked>
+					<label for="age1">0-4 года</label>
+				</div>
+				<div>
+					<input type="radio" name="age" value="5-17" id="age2">
+					<label for="age2">5-17 лет</label>
+				</div>
+				<div>
+					<input type="radio" name="age" value="18 и старше" id="age3">
+					<label for="age3">18 и старше</label>
+				</div>
 			</div>
 		</div>
 
 		<div class="shadow-card">
-			<div>
-				<label for="email">Почта</label>
+			<div class="checkbox-group">
+				<label>Дополнительные услуги</label>
+				<div>
+					<input type="checkbox" name="additional" value="нуждаюсь в парковке" id="parking">
+					<label for="parking">Нуждаюсь в парковке</label>
+				</div>
+				<div>
+					<input type="checkbox" name="additional" value="заселюсь с дом. питомцем" id="pet">
+					<label for="pet">Заселюсь с домашним питомцем</label>
+				</div>
+				<div>
+					<input type="checkbox" name="additional" value="имею вредные привычки" id="habits">
+					<label for="habits">Имею вредные привычки</label>
+				</div>
 			</div>
-			<div>
-				<input type="text" name="email" required>
-			</div>
+		</div>
+
+		<div class="shadow-card">
+			<label for="email">Email</label>
+			<input type="email" name="email" required>
 		</div>
 
 		<div class="shadow-card form-buttons-div">
-			<input type="submit" value="Забронировать">
-			<input type="reset" value="Очистить">
+			<input type="submit" value="Забронировать" class="btn-primary">
+			<input type="reset" value="Очистить" class="btn-secondary">
 		</div>
 	</form>
+
 	<div class="container">
+		<h2>Доступные отели</h2>
 		<div class="controls">
 			<input type="text" id="searchInput" placeholder="Поиск отелей...">
 			<select id="sortSelect">
@@ -130,13 +132,18 @@
 		</div>
 		<div id="hotelsContainer"></div>
 	</div>
+
+	<script src="{{ url_for('static', filename='js/Hotel.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/HotelReservation.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/UpdateTheme.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/app.js') }}"></script>
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			setTimeout(async function(){
 				await Hotel.loadHotels();
 				
 				document.getElementById('searchInput').addEventListener('input', (e) => {
-				const filtered = Hotel.searchHotels(e.target.value);
+					const filtered = Hotel.searchHotels(e.target.value);
 					const sorted = Hotel.sortHotels(filtered, document.getElementById('sortSelect').value);
 					Hotel.renderHotels(sorted);
 				});
