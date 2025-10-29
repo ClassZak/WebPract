@@ -15,8 +15,14 @@ document.addEventListener('DOMContentLoaded', function(){
 			formObject["additional"] = selectedAdditionals;
 
 			const newRecord = new HotelReservation(formObject);
-			HotelReservation.createHotelReservation(newRecord);
-			this.reset();
+			try{
+				await HotelReservation.createHotelReservation(newRecord);
+				alert(`Бронь успешно создана!
+					${newRecord.toString()}`);
+			} catch (error) {
+				console.error('Ошибка:', error);
+				alert(`Произошла ошибка при создании брони: ${error.message}`);
+			}
 		});
 
 		// Установка минимальных дат

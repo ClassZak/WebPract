@@ -31,27 +31,23 @@ Email: ${this.email}
 Отель: ${hotelName}`;
 	}
 
+	/*
+	 *	Создание брони отеля.
+		Требуется обработчик try catch
+	 * @param {*} hotelReservation 
+	*/
 	static async createHotelReservation(hotelReservation) {
-		try {
-			const response = await fetch('/api/hotel_reservation/new', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(hotelReservation)
-			});
-			
-			const data = await response.json();
-			
-			if (!response.ok) {
-				throw new Error(data.error || 'Ошибка сервера');
-			}
-			
-			alert(`Бронь успешно создана!
-				${hotelReservation.toString()}`);
-		} catch (error) {
-			console.error('Ошибка:', error);
-			alert('Произошла ошибка при создании брони: ' + error.message);
-		}
+		const response = await fetch('/api/hotel_reservation/new', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(hotelReservation)
+		});
+		
+		const data = await response.json();
+		
+		if (!response.ok)
+			throw new Error(data.error || 'Ошибка сервера');
 	}
 }
