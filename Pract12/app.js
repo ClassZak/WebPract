@@ -80,16 +80,16 @@ document.writeln(`
 `);
 
 function getAge(date){
-	let inputDate = new Date(date);
+	let startDate = new Date(date);
 	let dateNow = new Date();
 	let dateOfAge = new Date(
-		dateNow.getFullYear()        - inputDate.getFullYear(),
-		dateNow.getMonth()           - inputDate.getMonth(),
-		dateNow.getDate()            - inputDate.getDate(),
-		dateNow.getHours()           - inputDate.getHours(),
-		dateNow.getMinutes()         - inputDate.getMinutes(),
-		dateNow.getSeconds()         - inputDate.getSeconds(),
-		dateNow.getMilliseconds()    - inputDate.getMilliseconds(),
+		dateNow.getFullYear()        - startDate.getFullYear(),
+		dateNow.getMonth()           - startDate.getMonth(),
+		dateNow.getDate()            - startDate.getDate(),
+		dateNow.getHours()           - startDate.getHours(),
+		dateNow.getMinutes()         - startDate.getMinutes(),
+		dateNow.getSeconds()         - startDate.getSeconds(),
+		dateNow.getMilliseconds()    - startDate.getMilliseconds(),
 	);
 	return dateOfAge.getFullYear() - 1900;
 }

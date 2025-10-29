@@ -145,8 +145,8 @@ def hotel_reservation_new():
 			HAVING total_rooms - booked_rooms >= %s
 		"""
 		cursor.execute(check_query, (
-			data['inputDate'],
-			data['inputDate2'],
+			data['startDate'],
+			data['endDate'],
 			data['hotel'],
 			data['rooms_count']
 		))
@@ -184,8 +184,8 @@ def hotel_reservation_new():
 			data['surname'],
 			data['numberPeople'],
 			data['rooms_count'],
-			data['inputDate'],
-			data['inputDate2'],
+			data['startDate'],
+			data['endDate'],
 			data['email'],
 			age_desc_id
 		))
@@ -220,8 +220,8 @@ def hotel_reservation_new():
 		Количество гостей: {data['numberPeople']}
 		Возраст гостей: {data['age']}
 		Количество комнат: {data['rooms_count']}
-		Дата заезда: {data['inputDate']}
-		Дата выезда: {data['inputDate2']}
+		Дата заезда: {data['startDate']}
+		Дата выезда: {data['endDate']}
 		"""
 		if data.get('additional'):
 			email_text += f"""Дополинительно:
@@ -344,8 +344,8 @@ def hotels():
 # API для получения всех бронирований
 @app.route('/api/reservations', methods=['GET'])
 def get_reservations():
-    try:
-        connection = mysql.connector.connect(
+	try:
+		connection = mysql.connector.connect(
 			host	 = CONFIG['host'],
 			user	 = CONFIG['user'],
 			password = CONFIG['password'],
@@ -353,27 +353,34 @@ def get_reservations():
 			charset	 ='utf8mb4',
 			collation='utf8mb4_unicode_ci',
 		)
-        cursor = connection.cursor(dictionary=True)
-        
-        query = """
-            SELECT r.*, h.Name as hotel_name 
-            FROM HotelReservation r 
-            LEFT JOIN Hotel h ON r.IdHotel = h.Id 
-            ORDER BY r.StartDate DESC
-        """
-        cursor.execute(query)
-        reservations = cursor.fetchall()
-        
-        return jsonify({'reservations': reservations})
-        
-    except Exception as e:
-        print(f"Ошибка при получении бронирований: {str(e)}")
-        return jsonify({'error': 'Ошибка сервера'}), 500
-    finally:
-        if 'cursor' in locals():
-            cursor.close()
-        if 'connection' in locals():
-            connection.close()
+		cursor = connection.cursor(dictionary=True)
+		
+		query = """
+			SELECT	r.Id AS id, r.IdHotel AS idHotel, r.Surname AS surname,
+					r.NumberPeople AS numberPeople, r.RoomsCount as roomsCount,
+					r.StartDate AS startDate,
+					r.EndDate AS endDate,
+					r.Email AS email,
+					r.IdAgeDescription AS idAgeDescription,
+
+					h.Name as hotelName 
+			FROM HotelReservation r 
+			LEFT JOIN Hotel h ON r.IdHotel = h.Id 
+			ORDER BY r.StartDate DESC
+		"""
+		cursor.execute(query)
+		reservations = cursor.fetchall()
+		
+		return jsonify({'reservations': reservations})
+		
+	except Exception as e:
+		print(f"Ошибка при получении бронирований: {str(e)}")
+		return jsonify({'error': 'Ошибка сервера'}), 500
+	finally:
+		if 'cursor' in locals():
+			cursor.close()
+		if 'connection' in locals():
+			connection.close()
 # Точка входа
 def main():
 	try:

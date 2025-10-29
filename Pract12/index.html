@@ -10,18 +10,18 @@
 </head>
 <body>
 	<form name="form1">
-		<label for="inputDate"></label>
-		<input type="date" name="inputDate">
-		<input type="button" value="Получить возраст" onclick="form1.Age.value=getAge(form1.inputDate.value)">
+		<label for="startDate"></label>
+		<input type="date" name="startDate">
+		<input type="button" value="Получить возраст" onclick="form1.Age.value=getAge(form1.startDate.value)">
 		<input type="text" readonly name="Age">
 	</form>
 	<form name="form2">
 		<label for="inputDate1"></label>
 		<input type="date" name="inputDate1">
-		<label for="inputDate2"></label>
-		<input type="date" name="inputDate2">
+		<label for="EndDate"></label>
+		<input type="date" name="EndDate">
 		<input type="text" readonly name="result">
-		<input type="button" value="Получить разницу в днях" onclick="form2.result.value=getDaysBetweenDates(new Date(form2.inputDate1.value),new Date(form2.inputDate2.value))">
+		<input type="button" value="Получить разницу в днях" onclick="form2.result.value=getDaysBetweenDates(new Date(form2.inputDate1.value),new Date(form2.EndDate.value))">
 	</form>
 </body>
 </html>

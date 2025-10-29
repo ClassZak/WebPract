@@ -1,5 +1,5 @@
 function handler(event){
-	const element = document.form1.inputDate2;
+	const element = document.form1.endDate;
 	const date = event.target.value;
 	element.min = date;
 }
@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', function(){
 		});
 
 		// Установка минимальных дат
-		const element1 = document.form1.inputDate;
-		const element2 = document.form1.inputDate2;
+		const element1 = document.form1.startDate;
+		const element2 = document.form1.endDate;
 		const date = new Date();
 		const timeString = date.toISOString().split('T')[0];
 		element1.min = timeString;

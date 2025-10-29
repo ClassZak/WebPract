@@ -7,8 +7,8 @@ class HotelReservation {
 		this.surname = data.surname || '';
 		this.numberPeople = data.numberPeople || data.number_people || 1;
 		this.rooms_count = data.rooms_count || 1;
-		this.inputDate = data.inputDate || data.check_in_date || '';
-		this.inputDate2 = data.inputDate2 || data.check_out_date || '';
+		this.startDate = data.startDate || data.check_in_date || '';
+		this.endDate = data.endDate || data.check_out_date || '';
 		this.additional = Array.isArray(data.additional) ? data.additional : 
 						(data.additional ? [data.additional] : []);
 		this.age = data.age || '';
@@ -22,7 +22,7 @@ class HotelReservation {
 		
 		return `Бронь отеля: 
 ФИО: ${this.surname}
-С ${this.inputDate} по ${this.inputDate2} 
+С ${this.startDate} по ${this.EndDate} 
 Количество человек: ${this.numberPeople}
 Количество комнат: ${this.rooms_count}
 Возрастная группа: ${this.age}

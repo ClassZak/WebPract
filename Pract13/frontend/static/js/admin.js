@@ -112,12 +112,12 @@ class AdminPanel {
 		tbody.innerHTML = this.reservations.map(reservation => `
 			<tr>
 				<td>${reservation.id}</td>
-				<td>${this.escapeHtml(reservation.Surname)}</td>
-				<td>${this.escapeHtml(reservation.hotel_name || 'Неизвестно')}</td>
-				<td>${reservation.CheckInDate}</td>
-				<td>${reservation.CheckOutDate}</td>
-				<td>${reservation.NumberPeople}</td>
-				<td>${this.escapeHtml(reservation.Email)}</td>
+				<td>${this.escapeHtml(reservation.surname)}</td>
+				<td>${this.escapeHtml(reservation.hotelName || 'Неизвестно')}</td>
+				<td>${reservation.startDate}</td>
+				<td>${reservation.endDate}</td>
+				<td>${reservation.numberPeople}</td>
+				<td>${this.escapeHtml(reservation.email)}</td>
 			</tr>
 		`).join('');
 	}
