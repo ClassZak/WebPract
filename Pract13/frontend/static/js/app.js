@@ -13,37 +13,10 @@ document.addEventListener('DOMContentLoaded', function(){
 			const selectedAdditionals = formData.getAll('additional');
 			const formObject = Object.fromEntries(formData.entries());
 			formObject["additional"] = selectedAdditionals;
-			
-			try {
-				const newRecord = new HotelReservation(formObject);
-				alert(newRecord.toString());
-				HotelReservation.HotelReservations.push(newRecord);
 
-				// Отправка email
-				sendEmail(newRecord.toString(), newRecord.email);
-				
-				// Отправка на сервер
-				const response = await fetch(this.action, {
-					method: this.method,
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(newRecord)
-				});
-				
-				const data = await response.json();
-				
-				if (!response.ok) {
-					throw new Error(data.error || 'Ошибка сервера');
-				}
-				
-				alert('Бронь успешно создана!');
-				this.reset();
-				
-			} catch (error) {
-				console.error('Ошибка:', error);
-				alert('Произошла ошибка при создании брони: ' + error.message);
-			}
+			const newRecord = new HotelReservation(formObject);
+			HotelReservation.createHotelReservation(newRecord);
+			this.reset();
 		});
 
 		// Установка минимальных дат

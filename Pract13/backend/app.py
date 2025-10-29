@@ -148,7 +148,7 @@ def hotel_reservation_new():
 			data['startDate'],
 			data['endDate'],
 			data['hotel'],
-			data['rooms_count']
+			data['roomsCount']
 		))
 		availability = cursor.fetchone()
 
@@ -183,7 +183,7 @@ def hotel_reservation_new():
 			data['hotel'],
 			data['surname'],
 			data['numberPeople'],
-			data['rooms_count'],
+			data['roomsCount'],
 			data['startDate'],
 			data['endDate'],
 			data['email'],
@@ -219,7 +219,7 @@ def hotel_reservation_new():
 		Фамилия: {data['surname']}
 		Количество гостей: {data['numberPeople']}
 		Возраст гостей: {data['age']}
-		Количество комнат: {data['rooms_count']}
+		Количество комнат: {data['roomsCount']}
 		Дата заезда: {data['startDate']}
 		Дата выезда: {data['endDate']}
 		"""

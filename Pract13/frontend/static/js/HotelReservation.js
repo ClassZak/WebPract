@@ -6,7 +6,7 @@ class HotelReservation {
 
 		this.surname = data.surname || '';
 		this.numberPeople = data.numberPeople || data.number_people || 1;
-		this.rooms_count = data.rooms_count || 1;
+		this.roomsCount = data.roomsCount || 1;
 		this.startDate = data.startDate || data.check_in_date || '';
 		this.endDate = data.endDate || data.check_out_date || '';
 		this.additional = Array.isArray(data.additional) ? data.additional : 
@@ -22,12 +22,36 @@ class HotelReservation {
 		
 		return `Бронь отеля: 
 ФИО: ${this.surname}
-С ${this.startDate} по ${this.EndDate} 
+С ${this.startDate} по ${this.endDate} 
 Количество человек: ${this.numberPeople}
-Количество комнат: ${this.rooms_count}
+Количество комнат: ${this.roomsCount}
 Возрастная группа: ${this.age}
 Дополнительно: ${this.additional.join(', ')}
 Email: ${this.email}
 Отель: ${hotelName}`;
+	}
+
+	static async createHotelReservation(hotelReservation) {
+		try {
+			const response = await fetch('/api/hotel_reservation/new', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(hotelReservation)
+			});
+			
+			const data = await response.json();
+			
+			if (!response.ok) {
+				throw new Error(data.error || 'Ошибка сервера');
+			}
+			
+			alert(`Бронь успешно создана!
+				${hotelReservation.toString()}`);
+		} catch (error) {
+			console.error('Ошибка:', error);
+			alert('Произошла ошибка при создании брони: ' + error.message);
+		}
 	}
 }

@@ -6,7 +6,7 @@ class Hotel {
 		this.id = data.id || '';
 		this.name = data.name || '';
 		this.description = data.description || '';
-		this.roomsCount = data.roomsCount || data.rooms_count || '';
+		this.roomsCount = data.roomsCount || data.roomsCount || '';
 	}
 
 	toString() {
