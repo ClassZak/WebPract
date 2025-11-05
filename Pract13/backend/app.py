@@ -392,6 +392,7 @@ def main():
 		
 		app.run(debug=True, host='0.0.0.0', port=5001)
 	except Exception as e:
+		print(e)
 		pass
 
 if __name__=='__main__':

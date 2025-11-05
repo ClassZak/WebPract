@@ -232,11 +232,6 @@ select:focus {
 		gap: 15px;
 	}
 	
-	form {
-		margin: 20px;
-		padding: 20px;
-	}
-	
 	.form-buttons-div {
 		flex-direction: column;
 	}
@@ -249,5 +244,20 @@ select:focus {
 	#sortSelect {
 		max-width: none;
 		width: 100%;
+	}
+}
+
+@media (max-width: 700px) {
+	form {
+		padding: 20px;
+	}
+	.shadow-card{
+		padding: 15px;
+	}
+}
+
+@media (max-width: 640px) {
+	form {
+		margin: 20px;
 	}
 }
