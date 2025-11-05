@@ -11,6 +11,10 @@ from markupsafe import escape
 
 
 
+from service.hotelservice import HotelService
+hotelService = HotelService('Pract13/backend/.config.json')
+
+
 # Настройка CSRF
 from flask_wtf.csrf import CSRFProtect
 
@@ -73,6 +77,11 @@ def get_dict_from_request_form(request:Request) -> Dict:
 		for k in request.form.keys() 
 			for v in request.form.getlist(k)
 	}
+def get_dict_from_request(requrst:Request) -> Dict:
+	data = get_dict_from_request_form(request)
+	if not data:
+		data = request.get_json()
+	return data
 def send_simple_email(public_key, service_id, template_id, to_email, message, from_name="Hotel Reservation"):
 	url = "https://api.emailjs.com/api/v1.0/email/send"
 	
@@ -286,17 +295,7 @@ def hotels():
 				for row in raw_data
 			]})
 		elif request.method == 'POST':
-			data = get_dict_from_request_form(request)
-			if not data:
-				data = request.get_json()
-			query = f"""
-				INSERT INTO Hotel (`Name`, `Description`, RoomsCount) VALUES
-				({','.join(['%s'] * 3)})
-			"""
-			cursor.execute(query, (data['name'],data['description'],data['roomsCount']))
-
-			connection.commit()
-			return jsonify({'message' : "Создано успешно"}), 201
+			return hotelService.create(get_dict_from_request(request))
 		elif request.method == 'PUT':
 			data = get_dict_from_request_form(request)
 			if not data:

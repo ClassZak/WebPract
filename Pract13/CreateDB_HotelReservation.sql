@@ -52,3 +52,11 @@ ALTER TABLE HotelReservation_HotelReservationAdditional
 ADD CONSTRAINT HR_HRA__HotelReservationAdditional_REF
 FOREIGN KEY(IdHotelReservationAdditional)
 REFERENCES HotelReservationAdditional(Id);
+
+
+CREATE TABLE `Admin` (
+	Id				INT AUTO_INCREMENT PRIMARY KEY,
+	Login			VARCHAR(64) UNIQUE NOT NULL,
+	PasswordHash	CHAR(60) NOT NULL
+);
+

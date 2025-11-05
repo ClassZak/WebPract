@@ -3,3 +3,5 @@
 .emailjsconfig.json
 .config.json
 visits.log
+
+__pycache__
