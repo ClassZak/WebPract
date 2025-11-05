@@ -54,4 +54,34 @@ class HotelService(AService):
 			return jsonify({'error' : f'Ошибка БД: {str(e)}'}), 500
 		finally:
 			self.disconnect()
+	def read(self) ->Tuple[Response, int]:
+		try:
+			query = f"""
+				SELECT {','.join(Hotel.DB_COLUMNS_VALUES)}
+				FROM {HotelService.TABLE_NAME}
+			"""
+			self.connect()
+			self.cursor.execute(query)
+			raw_data = self.cursor.fetchall()
+
+			return jsonify({'hotels':[{
+					field: str(row[Hotel.DB_COLUMNS_INSERT[field]]) 
+					for field in Hotel.DB_COLUMNS_INSERT_KEYS
+				}
+				for row in raw_data
+			]}), 201
+		except ValueError as e:
+			return jsonify({'error' : str(e)}), 400
+		except IntegrityError as e:
+			self.connection.rollback()
+			return jsonify({'error' : f'Ошибка БД: {str(e)}'}), 500
+		except Error as e:
+			if self.connection:
+				try:
+					self.connection.rollback()
+				except:  # noqa: E722
+					pass
+			return jsonify({'error' : f'Ошибка БД: {str(e)}'}), 500
+		finally:
+			self.disconnect()
 

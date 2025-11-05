@@ -283,17 +283,7 @@ def hotels():
 		)
 		cursor = connection.cursor(dictionary=True)
 		if request.method == 'GET':
-			query = """
-				SELECT Id AS id, `Name` AS name, `Description` AS description, RoomsCount AS roomsCount
-				FROM Hotel
-			"""
-			cursor.execute(query)
-			raw_data = cursor.fetchall()
-			return jsonify({'hotels':[{
-					key : row[key] for key in row.keys()
-				}
-				for row in raw_data
-			]})
+			return hotelService.read()
 		elif request.method == 'POST':
 			return hotelService.create(get_dict_from_request(request))
 		elif request.method == 'PUT':

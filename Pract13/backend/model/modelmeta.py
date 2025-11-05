@@ -42,4 +42,7 @@ class ModelMeta(type):
 		dct['DB_COLUMNS_INSERT_KEYS'] = list(db_columns_insert.keys())
 		dct['DB_COLUMNS_INSERT_VALUES'] = list(db_columns_insert.values())
 
+		dct['DB_COLUMNS_KEYS'] = list(db_columns['columns'].keys())
+		dct['DB_COLUMNS_VALUES'] = list(db_columns['columns'].values())
+
 		return super().__new__(cls, name, bases, dct)
