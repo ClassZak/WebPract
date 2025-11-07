@@ -265,7 +265,7 @@ def hotel_reservation_new():
 		if 'connection' in locals():
 			connection.close()
 	
-@app.route('/admin')
+@app.route('/admin/')
 def admin():
 	return render_template('admin.html')
 
