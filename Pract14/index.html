@@ -1,24 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	<link rel="stylesheet" href="style.css">
-	<script src="Month.js"></script>
-	<script src="Season.js"></script>
-	<script src="app.js"></script>
-
-	
-	
-
-	<title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Месяцы и сезоны</title>
 </head>
 <body>
-	<form name="seacrh_form">
-		<input name="search" id="search" type="text" oninput="clearImages(); renderByTextQuery(event.target.value);">
-	</form>
-	<div name="images" id="images">
-	</div>
+    <div class="panel">
+        <form name="seacrh_form">
+            <input name="search" id="search" type="text" placeholder="Поиск месяцев..." oninput="clearImages(); renderByTextQuery(event.target.value);">
+        </form>
+        
+        <div class="controls">
+            <div class="sort-controls">
+                <button id="toggle-sort">Сортировка: выкл</button>
+                <button id="reverse-sort" disabled>Обратная сортировка</button>
+            </div>
+            <div class="season-buttons">
+                <button class="season-btn" data-season="1">Зима</button>
+                <button class="season-btn" data-season="2">Весна</button>
+                <button class="season-btn" data-season="3">Лето</button>
+                <button class="season-btn" data-season="4">Осень</button>
+            </div>
+        </div>
+    </div>
+    
+    <div name="images" id="images"></div>
+
+    <script src="Month.js"></script>
+    <script src="Season.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

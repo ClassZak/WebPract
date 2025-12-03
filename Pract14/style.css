@@ -1,5 +1,277 @@
-img{
-    aspect-ratio: 1/1;
-    width: 100px;
-    height: 100px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #242424;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.panel {
+    background-color: #333;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    margin: 0 auto 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    padding: 12px 16px;
+    width: 100%;
+    font-size: 16px;
+    background-color: #424242;
+    color: #fff;
+    border: 2px solid #555;
+    border-radius: 6px;
+    transition: all 0.3s;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+input[type="text"]::placeholder {
+    color: #aaa;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sort-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#toggle-sort {
+    padding: 12px 24px;
+    background-color: #424242;
+    color: white;
+    border: 2px solid #555;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+    flex: 1;
+}
+
+#toggle-sort:hover {
+    background-color: #4a4a4a;
+    border-color: #666;
+}
+
+#toggle-sort.active {
+    background-color: #1976D2;
+    border-color: #2196F3;
+}
+
+#reverse-sort {
+    padding: 12px 24px;
+    background-color: #424242;
+    color: #777;
+    border: 2px solid #555;
+    border-radius: 6px;
+    cursor: not-allowed;
+    font-size: 16px;
+    transition: all 0.3s;
+    flex: 1;
+}
+
+#reverse-sort:not(:disabled) {
+    background-color: #424242;
+    color: white;
+    cursor: pointer;
+    border-color: #FF9800;
+}
+
+#reverse-sort:not(:disabled):hover {
+    background-color: #4a4a4a;
+    border-color: #FFB74D;
+}
+
+.season-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.season-btn {
+    padding: 12px;
+    background-color: #424242;
+    border: 2px solid #555;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+    color: #e0e0e0;
+}
+
+.season-btn:hover {
+    background-color: #4a4a4a;
+    transform: translateY(-2px);
+}
+
+.season-btn.active {
+    background-color: #333;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.season-btn[data-season="1"] {
+    border-color: #3498db;
+}
+
+.season-btn[data-season="2"] {
+    border-color: #2ecc71;
+}
+
+.season-btn[data-season="3"] {
+    border-color: #e74c3c;
+}
+
+.season-btn[data-season="4"] {
+    border-color: #f39c12;
+}
+
+.season-btn[data-season="1"]:hover {
+    background-color: #2980b9;
+}
+
+.season-btn[data-season="2"]:hover {
+    background-color: #27ae60;
+}
+
+.season-btn[data-season="3"]:hover {
+    background-color: #c0392b;
+}
+
+.season-btn[data-season="4"]:hover {
+    background-color: #d68910;
+}
+
+#images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.month-card {
+    background-color: #333;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+    border: 1px solid #444;
+}
+
+.month-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    border-color: #555;
+}
+
+.month-card h2 {
+    color: #fff;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.month-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    border: 2px solid #444;
+}
+
+.month-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.month-number {
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.season-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.season-badge[data-season="1"] {
+    background-color: rgba(52, 152, 219, 0.2);
+    color: #3498db;
+    border: 1px solid #3498db;
+}
+
+.season-badge[data-season="2"] {
+    background-color: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 1px solid #2ecc71;
+}
+
+.season-badge[data-season="3"] {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+.season-badge[data-season="4"] {
+    background-color: rgba(243, 156, 18, 0.2);
+    color: #f39c12;
+    border: 1px solid #f39c12;
+}
+
+@media (max-width: 768px) {
+    .season-buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .sort-controls {
+        flex-direction: column;
+    }
+    
+    #images {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .panel {
+        padding: 15px;
+    }
+    
+    .season-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    #images {
+        grid-template-columns: 1fr;
+    }
 }
