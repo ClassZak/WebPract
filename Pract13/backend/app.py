@@ -2,11 +2,12 @@ import os
 import requests
 from typing import Dict
 from flask import Flask, Request, json, render_template, request, jsonify
+from markupsafe import escape
 import mysql.connector
-#import base64
-#from markupsafe import escape
+import base64
 from datetime import datetime
 
+from markupsafe import escape
 
 
 
@@ -15,7 +16,7 @@ hotelService = HotelService('Pract13/backend/.config.json')
 
 
 # Настройка CSRF
-# from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect
 
 
 print(os.getcwd())
@@ -265,29 +266,69 @@ def hotel_reservation_new():
 		if 'connection' in locals():
 			connection.close()
 	
-@app.route('/admin/')
+@app.route('/admin')
 def admin():
 	return render_template('admin.html')
 
 @app.route('/api/hotels', methods=['GET', 'POST', 'DELETE', 'PUT'])
 def hotels():
 	try:
+		connection = mysql.connector.connect(
+			host	 = CONFIG['host'],
+			user	 = CONFIG['user'],
+			password = CONFIG['password'],
+			database = CONFIG['database'],
+			charset	 ='utf8mb4',
+			collation='utf8mb4_unicode_ci',
+		)
+		cursor = connection.cursor(dictionary=True)
 		if request.method == 'GET':
 			return hotelService.read()
-		
-		data = get_dict_from_request(request)
-		
-		if request.method == 'POST':
-			return hotelService.create(data)
+		elif request.method == 'POST':
+			return hotelService.create(get_dict_from_request(request))
 		elif request.method == 'PUT':
-			return hotelService.update(data)
+			data = get_dict_from_request_form(request)
+			if not data:
+				data = request.get_json()
+			
+			if 'id' not in data:
+				return jsonify({'error': 'ID is required for update'}), 400
+				
+			query = """
+				UPDATE Hotel 
+				SET `Name` = %s, `Description` = %s, RoomsCount = %s 
+				WHERE Id = %s
+			"""
+			cursor.execute(query, (data['name'], data['description'], data['roomsCount'], data['id']))
+			
+			connection.commit()
+			return jsonify({'message': "Обновлено успешно"}), 200
 		elif request.method == 'DELETE':
-			return hotelService.delete(data['id'])
+			data = get_dict_from_request_form(request)
+			if not data:
+				data = request.get_json()
+			id_for_delete = data['id']
+
+			query = """
+				DELETE FROM Hotel
+				WHERE Id = %s
+			"""
+			cursor.execute(query, (id_for_delete,))
+
+			connection.commit()
+			return jsonify({'message' : "Удалено успешно"}), 200
 	except Exception as e:
-		print(f"Ошибка: {datetime.now()}\n{str(e)}")
+		if 'connection' in locals():
+			connection.rollback()
+		print(f"Ошибка: {str(e)}")
 		return jsonify({
 			'error': 'Внутренняя ошибка сервера'
 		}), 500
+	finally:
+		if 'cursor' in locals():
+			cursor.close()
+		if 'connection' in locals():
+			connection.close()
 
 # API для получения всех бронирований
 @app.route('/api/reservations', methods=['GET'])
